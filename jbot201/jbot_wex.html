@@ -1,0 +1,664 @@
+<html>
+<head>
+<title>
+WEX jBOT v2.0.1
+</title>
+<meta name="description" content="Bitcoin wex.nz j-Bot" />
+<meta property="keywords" content="" />
+<meta property="og:description" content="Bitcoin wex.nz j-Bot" />
+<meta property="og:image" content="http://funnymay.com/images/thumb.jpg" />
+<meta property="og:title" content="WEX jBOT v2.0.1" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="http://funnymay.com/" />
+  <style type="text/css">
+   body {
+    background-color: #222;
+    color: #999;
+   }
+   input, select {
+    background-color: #333;
+    border: 1px solid #666;
+    color: #999;
+   }
+  </style>
+</head>
+<body onLoad='initPage();'>
+<script type="text/javascript" >
+
+var superHost = 'http://127.0.0.1/jbot201';
+//var superHost = 'http://funnymay.com/jbot201';
+
+/*Cookie_START*/
+
+function getCookie(name) {
+    var matches = document.cookie.match(new RegExp(
+      "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+    ))
+    return matches ? decodeURIComponent(matches[1]) : 0
+}
+
+function setCookie(name, value, props) {
+    props = props || {}
+    var exp = props.expires
+    if (typeof exp == "number" && exp) {
+        var d = new Date()
+        d.setTime(d.getTime() + exp*1000)
+        exp = props.expires = d
+    }
+    if(exp && exp.toUTCString) { props.expires = exp.toUTCString() }
+
+    value = encodeURIComponent(value)
+    var updatedCookie = name + "=" + value
+    for(var propName in props){
+        updatedCookie += "; " + propName
+        var propValue = props[propName]
+        if(propValue !== true){ updatedCookie += "=" + propValue }
+    }
+    document.cookie = updatedCookie
+
+}
+
+function deleteCookie(name) {
+    setCookie(name, null, { expires: -1 })
+}
+
+function saveSettings () {
+
+	deleteCookie('set_'+top.document.runBot.botset.value);
+
+	var date = new Date;
+	date.setDate( date.getDate() + 30 );
+
+	var cookieString = '{"set": 1, "key": "'+top.document.runBot.key.value+'", "secret": "'+top.document.runBot.secret.value+'", "pair": "'+top.document.runBot.pair.value+'", "strategy": "'+top.document.runBot.strategy.value+'", "deltaprice": "'+top.document.runBot.deltaprice.value+'", "aroundprice": "'+top.document.runBot.aroundprice.value+'", "stepmount": "'+top.document.runBot.stepmount.value+'", "stepdistance": "'+top.document.runBot.stepdistance.value+'", "maxorders": "'+top.document.runBot.maxorders.value+'", "steptime": "'+top.document.runBot.steptime.value+'", "orderlife": "'+top.document.runBot.orderlife.value+'"}';
+	setCookie('set_'+top.document.runBot.botset.value, cookieString, { expires: date.toUTCString() });
+
+}
+
+function loadSettings () {
+
+	var sett = getCookie('set_'+top.document.runBot.botset.value);
+
+	if (sett != ""){
+		var brokenstring = JSON.parse(sett);
+		top.document.runBot.key.value = brokenstring.key;
+		top.document.runBot.secret.value = brokenstring.secret;
+			if (brokenstring.pair == 'btc_usd') {top.document.getElementById('pair').options[0].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'btc_rur') {top.document.getElementById('pair').options[1].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'btc_eur') {top.document.getElementById('pair').options[2].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'ltc_btc') {top.document.getElementById('pair').options[3].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'ltc_usd') {top.document.getElementById('pair').options[4].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'ltc_rur') {top.document.getElementById('pair').options[5].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'ltc_eur') {top.document.getElementById('pair').options[6].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'nmc_btc') {top.document.getElementById('pair').options[7].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'nmc_usd') {top.document.getElementById('pair').options[8].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'nvc_btc') {top.document.getElementById('pair').options[9].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'nvc_usd') {top.document.getElementById('pair').options[10].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'usd_rur') {top.document.getElementById('pair').options[11].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'eur_usd') {top.document.getElementById('pair').options[12].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'ppc_btc') {top.document.getElementById('pair').options[0].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'ppc_usd') {top.document.getElementById('pair').options[1].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'dsh_btc') {top.document.getElementById('pair').options[2].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'dsh_usd') {top.document.getElementById('pair').options[3].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'dsh_rur') {top.document.getElementById('pair').options[4].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'dsh_eur') {top.document.getElementById('pair').options[5].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'dsh_ltc') {top.document.getElementById('pair').options[6].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'dsh_eth') {top.document.getElementById('pair').options[7].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'eth_btc') {top.document.getElementById('pair').options[8].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'eth_usd') {top.document.getElementById('pair').options[9].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'eth_eur') {top.document.getElementById('pair').options[10].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'eth_ltc') {top.document.getElementById('pair').options[11].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'eth_rur') {top.document.getElementById('pair').options[12].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'bch_usd') {top.document.getElementById('pair').options[0].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'bch_btc') {top.document.getElementById('pair').options[1].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'bch_rur') {top.document.getElementById('pair').options[2].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'bch_eur') {top.document.getElementById('pair').options[3].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'bch_ltc') {top.document.getElementById('pair').options[4].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'bch_eth') {top.document.getElementById('pair').options[5].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'bch_dsh') {top.document.getElementById('pair').options[6].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'zec_btc') {top.document.getElementById('pair').options[7].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'zec_usd') {top.document.getElementById('pair').options[8].setAttribute('selected', 'selected');}
+			if (brokenstring.strategy == 'inner') {top.document.getElementById('strategy').options[0].setAttribute('selected', 'selected');}
+			if (brokenstring.strategy == 'outer') {top.document.getElementById('strategy').options[1].setAttribute('selected', 'selected');}
+			if (brokenstring.strategy == 'step') {top.document.getElementById('strategy').options[2].setAttribute('selected', 'selected');}
+		top.document.runBot.deltaprice.value = brokenstring.deltaprice;
+		top.document.runBot.aroundprice.value = brokenstring.aroundprice;
+		top.document.runBot.stepmount.value = brokenstring.stepmount;
+		top.document.runBot.stepdistance.value = brokenstring.stepdistance;
+		top.document.runBot.maxorders.value = brokenstring.maxorders;
+		top.document.runBot.steptime.value = brokenstring.steptime;
+		top.document.runBot.orderlife.value = brokenstring.orderlife;
+	}
+}
+
+/*Cookie_END*/
+
+/*XML_HTTP*/
+
+function getXMLHTTP() {
+    var x = false;
+    try {
+        x = new XMLHttpRequest();
+    }
+    catch(e) {
+        try {
+            x = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        catch(ex) {
+            try {
+                req = new ActiveXObject("Msxml2.XMLHTTP");
+            }
+            catch(e1) {
+                x = false;
+            }
+        }
+    }
+    return x;
+}
+
+/*XML_HTTP*/
+
+/*Bar Options*/
+
+function hiddenPop() {
+	document.getElementById('run').style.display = 'none';
+	document.getElementById('hButton').innerHTML = "<span onClick='showPop()' style='cursor: pointer; cursor: hand;'>Show Bar</span>";
+}
+
+function showPop() {
+	document.getElementById('run').style.display = 'block';
+	document.getElementById('hButton').innerHTML = "<span onClick='hiddenPop()' style='cursor: pointer; cursor: hand;'>Hide Bar</span>";
+}
+
+/*Bar Options*/
+
+/*Get Info*/
+
+function getInfo(url) {
+    var req = getXMLHTTP();
+    if (!req) {
+        document.getElementById('here').innerHTML = 'Unable to set up the XHR object.';
+        return;
+    }
+    req.onreadystatechange = function() {
+        if (req.readyState == 4) {
+            if (req.status == 200) {
+	   			 var response = req.responseText;
+					var brokenstring = JSON.parse(response);
+				    	if (brokenstring.success) {
+							document.getElementById('innerUSD').innerHTML = brokenstring.usd;
+							document.getElementById('innerEUR').innerHTML = brokenstring.eur;
+							document.getElementById('innerRUR').innerHTML = brokenstring.rur;
+							document.getElementById('innerBTC').innerHTML = brokenstring.btc;
+							document.getElementById('innerLTC').innerHTML = brokenstring.ltc;
+							document.getElementById('innerNMC').innerHTML = brokenstring.nmc;
+							document.getElementById('innerNVC').innerHTML = brokenstring.nvc;
+							document.getElementById('innerPPC').innerHTML = brokenstring.ppc;
+							document.getElementById('innerDSH').innerHTML = brokenstring.dsh;
+							document.getElementById('innerETH').innerHTML = brokenstring.eth;
+							document.getElementById('innerBCH').innerHTML = brokenstring.bch;
+							document.getElementById('innerZEC').innerHTML = brokenstring.zec;
+					    }
+
+            } else {
+            	document.getElementById('here').innerHTML = "There was a problem while using XMLHTTP:\n" + req.statusText;
+            }
+        }
+    };
+    req.open("GET", url, true);
+    req.send(null);
+}
+
+/*Get Info*/
+
+/*Chart Visualization*/
+
+function getChart () {
+
+document.getElementById('chart_div').innerHTML = "<iframe src='"+superHost+"/api.php?method=getChart&pair="+top.document.runBot.pair.value+"' width='700' height='500' align='left' frameBorder='0' scrolling='no'>"
++ "Ваш браузер не поддерживает плавающие фреймы!"
++ "</iframe>";
+
+}
+
+/*Chart Visualization*/
+
+/*Get Buy and Sell Positions*/
+
+function getView(url) {
+    var req = getXMLHTTP();
+    if (!req) {
+        document.getElementById('here').innerHTML = 'Unable to set up the XHR object.';
+        return;
+    }
+    req.onreadystatechange = function() {
+        if (req.readyState == 4) {
+            if (req.status == 200) {
+	   			var response = req.responseText;
+					var brokenstring = JSON.parse(response);
+			    	if (brokenstring.success) {
+
+			    		if (top.document.runBot.deltaprice.value) {
+			    		var spreadprice = brokenstring.sellprice - brokenstring.buyprice;
+							top.document.runBot.buyprice.value = (brokenstring.buyprice - top.document.runBot.deltaprice.value*spreadprice/100).toFixed(top.document.runBot.aroundprice.value);
+							top.document.runBot.sellprice.value = (brokenstring.sellprice + top.document.runBot.deltaprice.value*spreadprice/100).toFixed(top.document.runBot.aroundprice.value);
+			    		} else {
+							top.document.runBot.buyprice.value = brokenstring.buyprice;
+							top.document.runBot.sellprice.value = brokenstring.sellprice;
+						}
+				    }
+            } else {
+            	document.getElementById('here').innerHTML = "There was a problem while using XMLHTTP:\n" + req.statusText;
+            }
+        }
+    };
+    req.open("GET", url, true);
+    req.send(null);
+}
+
+/*Get Buy and Sell Positions*/
+
+/*Get Active Orders*/
+
+function getOrders(url) {
+
+var req = getXMLHTTP();
+    if (!req) {
+        document.getElementById('here').innerHTML = 'Unable to set up the XHR object.';
+        return;
+    }
+    req.onreadystatechange = function() {
+        if (req.readyState == 4) {
+            if (req.status == 200) {
+	   			var response = req.responseText;
+	   			document.getElementById('here').innerHTML = response;
+
+            } else {
+            	document.getElementById('here').innerHTML = "There was a problem while using XMLHTTP:\n" + req.statusText;
+            }
+        }
+    };
+    req.open("GET", url, true);
+    req.send(null);
+}
+
+/*Get Active Orders*/
+
+/*Order Control*/
+
+function controlBuyPrice() {
+var com = top.document.runBot.buyorder.value*top.document.runBot.buyprice.value;
+var pair = top.document.getElementById('pair').value;
+var vOne;
+	if (pair == 'btc_usd') {vOne = 'innerUSD';}
+	if (pair == 'btc_rur') {vOne = 'innerRUR';}
+	if (pair == 'ltc_btc') {vOne = 'innerBTC';}
+	if (pair == 'ltc_usd') {vOne = 'innerUSD';}
+	if (pair == 'ltc_rur') {vOne = 'innerRUR';}
+	if (pair == 'nvc_btc') {vOne = 'innerBTC';}
+	if (pair == 'nvc_rur') {vOne = 'innerRUR';}
+	if (pair == 'eth_btc') {vOne = 'innerBTC';}
+	if (pair == 'eth_usd') {vOne = 'innerUSD';}
+	if (pair == 'eth_rur') {vOne = 'innerRUR';}
+	if (pair == 'ppc_btc') {vOne = 'innerBTC';}
+	if (pair == 'ppc_usd') {vOne = 'innerUSD';}
+	if (pair == 'usd_rur') {vOne = 'innerRUR';}
+
+var amusd = document.getElementById(vOne).innerHTML;
+	if (top.document.runBot.buyorder.value >= 0.001) {
+		if (com > amusd) {
+		document.getElementById('buyorder').style.background = '#FBB';
+		document.getElementById('buyprice').style.background = '#FBB';
+		top.document.runBot.buycontrol.value = 0;
+		} else {
+		document.getElementById('buyorder').style.background = '#333';
+		document.getElementById('buyprice').style.background = '#333';
+		top.document.runBot.buycontrol.value = 1;
+		}
+
+	}
+}
+
+function controlSellPrice() {
+var com = top.document.runBot.sellorder.value;
+var pair = top.document.getElementById('pair').value;
+var vOne;
+	if (pair == 'btc_usd') {vOne = 'innerBTC';}
+	if (pair == 'btc_rur') {vOne = 'innerBTC';}
+	if (pair == 'ltc_btc') {vOne = 'innerLTC';}
+	if (pair == 'ltc_usd') {vOne = 'innerLTC';}
+	if (pair == 'ltc_rur') {vOne = 'innerLTC';}
+	if (pair == 'nvc_btc') {vOne = 'innerNVC';}
+	if (pair == 'nvc_rur') {vOne = 'innerNVC';}
+	if (pair == 'eth_btc') {vOne = 'innerETH';}
+	if (pair == 'eth_usd') {vOne = 'innerETH';}
+	if (pair == 'eth_rur') {vOne = 'innerETH';}
+	if (pair == 'ppc_btc') {vOne = 'innerPPC';}
+	if (pair == 'ppc_usd') {vOne = 'innerPPC';}
+	if (pair == 'usd_rur') {vOne = 'innerUSD';}
+
+	var ambtc = document.getElementById(vOne).innerHTML;
+		if (com > ambtc || top.document.runBot.sellorder.value <= 0.001) {
+		document.getElementById('sellorder').style.background = '#FBB';
+		document.getElementById('sellprice').style.background = '#FBB';
+		top.document.runBot.sellcontrol.value = 0;
+		} else {
+		document.getElementById('sellorder').style.background = '#333';
+		document.getElementById('sellprice').style.background = '#333';
+		top.document.runBot.sellcontrol.value = 1;
+		}
+}
+
+/*Order Control*/
+
+/*SEND ORDER*/
+
+function sendOrder(url) {
+    var req = getXMLHTTP();
+    if (!req) {
+        document.getElementById('here').innerHTML = 'Unable to set up the XHR object.';
+        return;
+    }
+    req.onreadystatechange = function() {
+        if (req.readyState == 4) {
+            if (req.status == 200) {
+	   			 return true;
+
+            } else {
+            	document.getElementById('here').innerHTML = "There was a problem while using XMLHTTP:\n" + req.statusText;
+            }
+        }
+    };
+    req.open("GET", url, true);
+    req.send(null);
+}
+
+function sendBuyOrder(){
+	controlBuyPrice();
+	if (top.document.runBot.buycontrol.value == 1 && top.document.runBot.buyoption.value == 1 && top.document.runBot.numbuyorders.value <= top.document.runBot.maxorders.value) {
+	 var url = ""+superHost+"/api.php?method=Trade&key="+top.document.runBot.key.value+"&secret="+top.document.runBot.secret.value+"&pair="+top.document.runBot.pair.value+"&type=buy&amount="+top.document.runBot.buyorder.value+"&rate="+top.document.runBot.buyprice.value;
+	 sendOrder(url);
+	}
+}
+
+function sendSellOrder(){
+	controlSellPrice();
+	if (top.document.runBot.sellcontrol.value == 1 && top.document.runBot.selloption.value == 1 && top.document.runBot.numsellorders.value <= top.document.runBot.maxorders.value) {
+	 var url = ""+superHost+"/api.php?method=Trade&key="+top.document.runBot.key.value+"&secret="+top.document.runBot.secret.value+"&pair="+top.document.runBot.pair.value+"&type=sell&amount="+top.document.runBot.buyorder.value+"&rate="+top.document.runBot.buyprice.value;
+	 sendOrder(url);
+	}
+}
+
+/*SEND ORDER*/
+
+/*Page Structure*/
+
+function initPage() {
+	showPop();
+	loadSettings();
+	//Get info if Key and Secret are true
+	if (top.document.runBot.key.value != '' && top.document.runBot.secret.value != '') {
+		getInfo(""+superHost+"/api.php?method=getInfo&key="+top.document.runBot.key.value+"&secret="+top.document.runBot.secret.value);
+	}
+	//Get Chart
+	getChart ();
+	//Get Orders
+	getOrders(""+superHost+"/api.php?method=ActiveOrders&key="+top.document.runBot.key.value+"&secret="+top.document.runBot.secret.value+"&pair="+top.document.runBot.pair.value);
+
+	//Recycle
+	var msec = top.document.runBot.steptime.value*1000;
+	setInterval(refreshData, msec);
+
+}
+
+/*Page Structure*/
+
+/*Refresh Data*/
+
+function refreshData () {
+	getChart ();
+	getInfo(""+superHost+"/api.php?method=getInfo&key="+top.document.runBot.key.value+"&secret="+top.document.runBot.secret.value);
+	getView(""+superHost+"/api.php?method=getView&pair="+top.document.runBot.pair.value+"&strategy="+top.document.runBot.strategy.value);
+	if (top.document.runBot.botsrun.value == 1) {
+		top.document.runBot.buyorder.value = top.document.runBot.stepmount.value;
+		top.document.runBot.sellorder.value = top.document.runBot.stepmount.value;
+		sendBuyOrder();
+		sendSellOrder();
+	}
+	getOrders(""+superHost+"/api.php?method=ActiveOrders&key="+top.document.runBot.key.value+"&secret="+top.document.runBot.secret.value+"&pair="+top.document.runBot.pair.value);
+}
+
+/*Refresh Data*/
+
+/*Run Bot*/
+
+function rBot() {
+	if (top.document.runBot.botsrun.value != 1){
+		top.document.runBot.botsrun.value = 1;
+		top.document.runBot.runBotButton.value = 'Stop Bot';
+	} else {
+		top.document.runBot.botsrun.value = 0;
+		top.document.runBot.runBotButton.value = 'Run Bot';
+	}
+}
+
+/*Run Bot*/
+
+</script>
+<form id='runBot' name='runBot' method='get' action='/'>
+<table cellpadding='0' cellspacing='0' border='0' width='100%'>
+<tr>
+<td width='100'>
+<div id='hButton'>
+</div>
+</td>
+<td width=* height='40'>
+<div id='run'>
+<input type='text' name='key' placeholder='API key'>
+<input type='text' name='secret' placeholder='API secret'>
+<input type='text' hidden name='botsrun' value='0'>
+<input type='button' name='runBotButton' value='Run Bot' onClick='rBot();'>
+</div>
+</td>
+</tr>
+</table>
+
+<table cellpadding='0' cellspacing='0' border='0' width='100%'>
+<tr>
+
+<td width='70'>USD:&nbsp;</td>
+<td><div id='innerUSD'>Loading...</div></td>
+
+<td width='70'>EUR:&nbsp;</td>
+<td><div id='innerEUR'>Loading...</div></td>
+
+<td width='70'>RUR:&nbsp;</td>
+<td><div id='innerRUR'>Loading...</div></td>
+
+<td width='70'>BTC:&nbsp;</td>
+<td><div id='innerBTC'>Loading...</div></td>
+
+<td width='70'>LTC:&nbsp;</td>
+<td><div id='innerLTC'>Loading...</div></td>
+
+<td width='70'>NMC:&nbsp;</td>
+<td><div id='innerNMC'>Loading...</div></td>
+
+</tr>
+<tr>
+
+<td>NVC:&nbsp;</td>
+<td><div id='innerNVC'>Loading...</div></td>
+
+<td>PPC:&nbsp;</td>
+<td><div id='innerPPC'>Loading...</div></td>
+
+<td>DSH:&nbsp;</td>
+<td><div id='innerDSH'>Loading...</div></td>
+
+<td>ETH:&nbsp;</td>
+<td><div id='innerETH'>Loading...</div></td>
+
+<td>BCH:&nbsp;</td>
+<td><div id='innerBCH'>Loading...</div></td>
+
+<td>ZEC:&nbsp;</td>
+<td><div id='innerZEC'>Loading...</div></td>
+
+</tr>
+</table>
+
+<table cellpadding='0' cellspacing='0' border='0' width='100%'>
+<tr>
+<td width='8%' height='30' align='right'>Pair:&nbsp;
+</td>
+<td width='8%'>
+<select id='pair' name='pair' onChange='getChart();'>
+  <option value='btc_usd'>BTC/USD</option>
+  <option value='btc_rur'>BTC/RUR</option>
+  <option value='btc_eur'>BTC/EUR</option>
+  <option value='ltc_btc'>LTC/BTC</option>
+  <option value='ltc_usd'>LTC/USD</option>
+  <option value='ltc_rur'>LTC/RUR</option>
+  <option value='ltc_eur'>LTC/EUR</option>
+  <option value='nmc_btc'>NMC/BTC</option>
+  <option value='nmc_usd'>NMC/USD</option>
+  <option value='nvc_btc'>NVC/BTC</option>
+  <option value='nvc_usd'>NVC/USD</option>
+  <option value='usd_rur'>USD/RUR</option>
+  <option value='eur_usd'>EUR/USD</option>
+  <option value='ppc_btc'>PPC/BTC</option>
+  <option value='ppc_usd'>PPC/USD</option>
+  <option value='dsh_btc'>DSH/BTC</option>
+  <option value='dsh_usd'>DSH/USD</option>
+  <option value='dsh_rur'>DSH/RUR</option>
+  <option value='dsh_eur'>DSH/EUR</option>
+  <option value='dsh_ltc'>DSH/LTC</option>
+  <option value='dsh_eth'>DSH/ETH</option>
+  <option value='eth_btc'>ETH/BTC</option>
+  <option value='eth_usd'>ETH/USD</option>
+  <option value='eth_eur'>ETH/EUR</option>
+  <option value='eth_ltc'>ETH/LTC</option>
+  <option value='eth_rur'>ETH/RUR</option>
+  <option value='bch_usd'>BCH/USD</option>
+  <option value='bch_btc'>BCH/BTC</option>
+  <option value='bch_rur'>BCH/RUR</option>
+  <option value='bch_eur'>BCH/EUR</option>
+  <option value='bch_ltc'>BCH/LTC</option>
+  <option value='bch_eth'>BCH/ETH</option>
+  <option value='bch_dsh'>BCH/DSH</option>
+  <option value='zec_btc'>ZEC/BTC</option>
+  <option value='zec_usd'>ZEC/USD</option>
+</select>
+</td>
+
+<td width='8%' align='right'>Max Orders&nbsp;
+</td>
+<td width='8%'><input type='text' name='maxorders' placeholder='4' value='4' size='5'>
+</td>
+<td width='8%' align='right'>Step Amount&nbsp;
+</td>
+<td width='8%'><input type='text' name='stepmount' placeholder='0.001' value='0.001' size='5'>
+</td>
+<td width='8%' align='right'>Step Time, sec&nbsp;
+</td>
+<td width='8%'><input type='text' name='steptime' placeholder='60' value='60' size='5' onChange='initPage();'>
+</td>
+</tr><tr>
+<td height='30' align='right'>Strategy:&nbsp;
+</td>
+<td>
+<select id='strategy' name='strategy'>
+  <option value='inner'>INNER</option>
+  <option value='outer'>OUTER</option>
+  <option value='step'>STEP</option>
+</select>
+</td>
+<td align='right'>Around&nbsp;
+</td>
+<td><input type='text' name='aroundprice' placeholder='4' value='4' size='5'>
+</td>
+<td align='right'>Step Distance&nbsp;
+</td>
+<td><input type='text' name='stepdistance' placeholder='0.001' value='0.001' size='5'>
+</td>
+<td align='right'>Order Life, min&nbsp;
+</td>
+<td><input type='text' name='orderlife' placeholder='180' value='180' size='5'>
+</td>
+</tr><tr>
+<td height='30' align='right'></td>
+<td></td>
+<td align='right'></td>
+<td></td>
+
+<td align='right'>Delta, %&nbsp;
+</td>
+<td><input type='text' name='deltaprice' placeholder='-10' value='-10' size='5' >
+</td>
+<td align='right'>
+<select id='botset' name='botset' onChange='loadSettings();'>
+  <option value='1'>Set: 1</option>
+  <option value='2'>Set: 2</option>
+  <option value='3'>Set: 3</option>
+  <option value='4'>Set: 4</option>
+  <option value='5'>Set: 5</option>
+  <option value='6'>Set: 6</option>
+  <option value='7'>Set: 7</option>
+  <option value='8'>Set: 8</option>
+  <option value='9'>Set: 9</option>
+  <option value='10'>Set: 10</option>
+</select>
+</td>
+<td><input type='button' name='saveBotButton' value='Save Bot Settings' onClick='saveSettings();'>
+</td>
+</tr>
+</table>
+
+<table cellpadding='0' cellspacing='0' border='0' width='100%'>
+<tr>
+<td width='700' height='300'>
+
+<div id='chart_div' style='width: 700px; height: 500px;'>Loading...</div>
+
+</td>
+<td width=* valign='top'>
+
+	<table cellpadding='10' cellspacing='10' border='0' width='100%'>
+	<tr><td>BUY<br>
+	<input type='text' name='buyorder' placeholder='min 0.001' size='5' id='buyorder' onChange='controlBuyPrice()'><br>
+	<input type='text' name='buyprice' placeholder='price' size='5' id='buyprice' onChange='controlBuyPrice()'><br>
+	<input type='text' hidden name='buycontrol'>
+	<select id='buyoption' name='buyoption'>
+	  <option value='0' selected>Disallow</option>
+	  <option value='1'>Allow</option>
+	</select><br><br>
+	<input type='button' name='buyButton' value='BUY' onClick='sendBuyOrder();' style='width: 95px; height: 30px; background: #008000; color: #000; font-weight: bold;'>
+	</td><td>SELL<br>
+	<input type='text' name='sellorder' placeholder='min 0.001' size='5' id='sellorder' onChange='controlSellPrice()'><br>
+	<input type='text' name='sellprice' placeholder='price' size='5' id='sellprice' onChange='controlSellPrice()'><br>
+	<input type='text' hidden name='sellcontrol'>
+	<select id='selloption' name='selloption'>
+	  <option value='0' selected>Disallow</option>
+	  <option value='1'>Allow</option>
+	</select><br><br>
+	<input type='button' name='sellButton' value='SELL' onClick='sendSellOrder();' style='width: 95px; height: 30px; background: #ff0000; color: #000; font-weight: bold;'>
+	</td></tr>
+	</table>
+	<table cellpadding='10' cellspacing='10' border='0' width='100%'>
+	<tr><td>
+	<input hidden name='lastorder'>
+	<input hidden name='numbuyorders'>
+	<input hidden name='numsellorders'>
+	<div id='orders'>Loading...</div>
+	</td></tr>
+	</table>
+</td>
+</tr>
+</table>
+
+</form>
+
+<div id='here'> </div>
+
+</body>
+</html>
