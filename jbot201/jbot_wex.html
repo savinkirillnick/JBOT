@@ -25,8 +25,8 @@ WEX jBOT v2.0.1
 <body onLoad='initPage();'>
 <script type="text/javascript" >
 
-var superHost = 'http://127.0.0.1/jbot201';
-//var superHost = 'http://funnymay.com/jbot201';
+//var superHost = 'http://127.0.0.1/jbot201';
+var superHost = 'http://funnymay.com/jbot201';
 
 /*Cookie_START*/
 
@@ -69,7 +69,7 @@ function saveSettings () {
 	var date = new Date;
 	date.setDate( date.getDate() + 30 );
 
-	var cookieString = '{"set": 1, "key": "'+top.document.runBot.key.value+'", "secret": "'+top.document.runBot.secret.value+'", "pair": "'+top.document.runBot.pair.value+'", "strategy": "'+top.document.runBot.strategy.value+'", "deltaprice": "'+top.document.runBot.deltaprice.value+'", "aroundprice": "'+top.document.runBot.aroundprice.value+'", "stepmount": "'+top.document.runBot.stepmount.value+'", "stepdistance": "'+top.document.runBot.stepdistance.value+'", "maxorders": "'+top.document.runBot.maxorders.value+'", "steptime": "'+top.document.runBot.steptime.value+'", "orderlife": "'+top.document.runBot.orderlife.value+'"}';
+	var cookieString = '{"set": 1, "key": "'+top.document.runBot.key.value+'", "secret": "'+top.document.runBot.secret.value+'", "pair": "'+top.document.runBot.pair.value+'", "fee": "'+top.document.runBot.fee.value+'", "strategy": "'+top.document.runBot.strategy.value+'", "deltaprice": "'+top.document.runBot.deltaprice.value+'", "aroundprice": "'+top.document.runBot.aroundprice.value+'", "stepmount": "'+top.document.runBot.stepmount.value+'", "stepdistance": "'+top.document.runBot.stepdistance.value+'", "maxorders": "'+top.document.runBot.maxorders.value+'", "steptime": "'+top.document.runBot.steptime.value+'", "orderlife": "'+top.document.runBot.orderlife.value+'"}';
 	setCookie('set_'+top.document.runBot.botset.value, cookieString, { expires: date.toUTCString() });
 
 }
@@ -95,31 +95,32 @@ function loadSettings () {
 			if (brokenstring.pair == 'nvc_usd') {top.document.getElementById('pair').options[10].setAttribute('selected', 'selected');}
 			if (brokenstring.pair == 'usd_rur') {top.document.getElementById('pair').options[11].setAttribute('selected', 'selected');}
 			if (brokenstring.pair == 'eur_usd') {top.document.getElementById('pair').options[12].setAttribute('selected', 'selected');}
-			if (brokenstring.pair == 'ppc_btc') {top.document.getElementById('pair').options[0].setAttribute('selected', 'selected');}
-			if (brokenstring.pair == 'ppc_usd') {top.document.getElementById('pair').options[1].setAttribute('selected', 'selected');}
-			if (brokenstring.pair == 'dsh_btc') {top.document.getElementById('pair').options[2].setAttribute('selected', 'selected');}
-			if (brokenstring.pair == 'dsh_usd') {top.document.getElementById('pair').options[3].setAttribute('selected', 'selected');}
-			if (brokenstring.pair == 'dsh_rur') {top.document.getElementById('pair').options[4].setAttribute('selected', 'selected');}
-			if (brokenstring.pair == 'dsh_eur') {top.document.getElementById('pair').options[5].setAttribute('selected', 'selected');}
-			if (brokenstring.pair == 'dsh_ltc') {top.document.getElementById('pair').options[6].setAttribute('selected', 'selected');}
-			if (brokenstring.pair == 'dsh_eth') {top.document.getElementById('pair').options[7].setAttribute('selected', 'selected');}
-			if (brokenstring.pair == 'eth_btc') {top.document.getElementById('pair').options[8].setAttribute('selected', 'selected');}
-			if (brokenstring.pair == 'eth_usd') {top.document.getElementById('pair').options[9].setAttribute('selected', 'selected');}
-			if (brokenstring.pair == 'eth_eur') {top.document.getElementById('pair').options[10].setAttribute('selected', 'selected');}
-			if (brokenstring.pair == 'eth_ltc') {top.document.getElementById('pair').options[11].setAttribute('selected', 'selected');}
-			if (brokenstring.pair == 'eth_rur') {top.document.getElementById('pair').options[12].setAttribute('selected', 'selected');}
-			if (brokenstring.pair == 'bch_usd') {top.document.getElementById('pair').options[0].setAttribute('selected', 'selected');}
-			if (brokenstring.pair == 'bch_btc') {top.document.getElementById('pair').options[1].setAttribute('selected', 'selected');}
-			if (brokenstring.pair == 'bch_rur') {top.document.getElementById('pair').options[2].setAttribute('selected', 'selected');}
-			if (brokenstring.pair == 'bch_eur') {top.document.getElementById('pair').options[3].setAttribute('selected', 'selected');}
-			if (brokenstring.pair == 'bch_ltc') {top.document.getElementById('pair').options[4].setAttribute('selected', 'selected');}
-			if (brokenstring.pair == 'bch_eth') {top.document.getElementById('pair').options[5].setAttribute('selected', 'selected');}
-			if (brokenstring.pair == 'bch_dsh') {top.document.getElementById('pair').options[6].setAttribute('selected', 'selected');}
-			if (brokenstring.pair == 'zec_btc') {top.document.getElementById('pair').options[7].setAttribute('selected', 'selected');}
-			if (brokenstring.pair == 'zec_usd') {top.document.getElementById('pair').options[8].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'ppc_btc') {top.document.getElementById('pair').options[13].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'ppc_usd') {top.document.getElementById('pair').options[14].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'dsh_btc') {top.document.getElementById('pair').options[15].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'dsh_usd') {top.document.getElementById('pair').options[16].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'dsh_rur') {top.document.getElementById('pair').options[17].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'dsh_eur') {top.document.getElementById('pair').options[18].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'dsh_ltc') {top.document.getElementById('pair').options[19].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'dsh_eth') {top.document.getElementById('pair').options[20].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'eth_btc') {top.document.getElementById('pair').options[21].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'eth_usd') {top.document.getElementById('pair').options[22].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'eth_eur') {top.document.getElementById('pair').options[23].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'eth_ltc') {top.document.getElementById('pair').options[24].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'eth_rur') {top.document.getElementById('pair').options[25].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'bch_usd') {top.document.getElementById('pair').options[26].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'bch_btc') {top.document.getElementById('pair').options[27].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'bch_rur') {top.document.getElementById('pair').options[28].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'bch_eur') {top.document.getElementById('pair').options[29].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'bch_ltc') {top.document.getElementById('pair').options[30].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'bch_eth') {top.document.getElementById('pair').options[31].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'bch_dsh') {top.document.getElementById('pair').options[32].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'zec_btc') {top.document.getElementById('pair').options[33].setAttribute('selected', 'selected');}
+			if (brokenstring.pair == 'zec_usd') {top.document.getElementById('pair').options[34].setAttribute('selected', 'selected');}
 			if (brokenstring.strategy == 'inner') {top.document.getElementById('strategy').options[0].setAttribute('selected', 'selected');}
 			if (brokenstring.strategy == 'outer') {top.document.getElementById('strategy').options[1].setAttribute('selected', 'selected');}
 			if (brokenstring.strategy == 'step') {top.document.getElementById('strategy').options[2].setAttribute('selected', 'selected');}
+		top.document.runBot.fee.value = brokenstring.fee;
 		top.document.runBot.deltaprice.value = brokenstring.deltaprice;
 		top.document.runBot.aroundprice.value = brokenstring.aroundprice;
 		top.document.runBot.stepmount.value = brokenstring.stepmount;
@@ -289,6 +290,7 @@ function controlBuyPrice() {
 var com = top.document.runBot.buyorder.value*top.document.runBot.buyprice.value;
 var pair = top.document.getElementById('pair').value;
 var vOne;
+//vOne = "inner"+pair.substring(-3,3).toUpperCase();
 	if (pair == 'btc_usd') {vOne = 'innerUSD';}
 	if (pair == 'btc_rur') {vOne = 'innerRUR';}
 	if (pair == 'ltc_btc') {vOne = 'innerBTC';}
@@ -322,6 +324,7 @@ function controlSellPrice() {
 var com = top.document.runBot.sellorder.value;
 var pair = top.document.getElementById('pair').value;
 var vOne;
+//vOne = "inner"+pair.substring(0,3).toUpperCase();
 	if (pair == 'btc_usd') {vOne = 'innerBTC';}
 	if (pair == 'btc_rur') {vOne = 'innerBTC';}
 	if (pair == 'ltc_btc') {vOne = 'innerLTC';}
@@ -346,6 +349,31 @@ var vOne;
 		document.getElementById('sellprice').style.background = '#333';
 		top.document.runBot.sellcontrol.value = 1;
 		}
+}
+
+function cancelOrder(url) {
+
+var req = getXMLHTTP();
+    if (!req) {
+        document.getElementById('here').innerHTML = 'Unable to set up the XHR object.';
+        return;
+    }
+    req.onreadystatechange = function() {
+        if (req.readyState == 4) {
+            if (req.status == 200) {
+	   			var response = req.responseText;
+				var brokenstring = JSON.parse(response);
+			    	if (brokenstring.success) {
+	   					document.getElementById('here').innerHTML = "Order "+brokenstring["return"]["order_id"]+" was cancelled.";
+			    	}
+
+            } else {
+            	document.getElementById('here').innerHTML = "There was a problem while using XMLHTTP:\n" + req.statusText;
+            }
+        }
+    };
+    req.open("GET", url, true);
+    req.send(null);
 }
 
 /*Order Control*/
@@ -420,7 +448,7 @@ function refreshData () {
 	getView(""+superHost+"/api.php?method=getView&pair="+top.document.runBot.pair.value+"&strategy="+top.document.runBot.strategy.value);
 	if (top.document.runBot.botsrun.value == 1) {
 		top.document.runBot.buyorder.value = top.document.runBot.stepmount.value;
-		top.document.runBot.sellorder.value = top.document.runBot.stepmount.value;
+		top.document.runBot.sellorder.value = top.document.runBot.stepmount.value*(100-top.document.runBot.fee.value)/100;
 		sendBuyOrder();
 		sendSellOrder();
 	}
@@ -588,8 +616,10 @@ function rBot() {
 </tr><tr>
 <td height='30' align='right'></td>
 <td></td>
-<td align='right'></td>
-<td></td>
+<td align='right'>Fee, %&nbsp;
+</td>
+<td><input type='text' name='fee' placeholder='4' value='0.2' size='5'>
+</td>
 
 <td align='right'>Delta, %&nbsp;
 </td>
