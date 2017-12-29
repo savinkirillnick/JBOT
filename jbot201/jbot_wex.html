@@ -177,7 +177,7 @@ function showPop() {
 function getInfo(url) {
     var req = getXMLHTTP();
     if (!req) {
-        document.getElementById('here').innerHTML = 'Unable to set up the XHR object.';
+        document.getElementById('here').innerHTML += "Unable to set up the XHR object.<br>";
         return;
     }
     req.onreadystatechange = function() {
@@ -201,7 +201,7 @@ function getInfo(url) {
 					    }
 
             } else {
-            	document.getElementById('here').innerHTML = "There was a problem while using XMLHTTP:\n" + req.statusText;
+            	document.getElementById('here').innerHTML += "There was a problem while using XMLHTTP:\n" + req.statusText+"<br>";
             }
         }
     };
@@ -228,7 +228,7 @@ document.getElementById('chart_div').innerHTML = "<iframe src='"+superHost+"/api
 function getView(url) {
     var req = getXMLHTTP();
     if (!req) {
-        document.getElementById('here').innerHTML = 'Unable to set up the XHR object.';
+        document.getElementById('here').innerHTML += "Unable to set up the XHR object.<br>";
         return;
     }
     req.onreadystatechange = function() {
@@ -248,7 +248,7 @@ function getView(url) {
 						}
 				    }
             } else {
-            	document.getElementById('here').innerHTML = "There was a problem while using XMLHTTP:\n" + req.statusText;
+            	document.getElementById('here').innerHTML += "There was a problem while using XMLHTTP:\n" + req.statusText+"<br>";
             }
         }
     };
@@ -264,17 +264,46 @@ function getOrders(url) {
 
 var req = getXMLHTTP();
     if (!req) {
-        document.getElementById('here').innerHTML = 'Unable to set up the XHR object.';
+        document.getElementById('here').innerHTML += "Unable to set up the XHR object.<br>";
         return;
     }
     req.onreadystatechange = function() {
         if (req.readyState == 4) {
             if (req.status == 200) {
 	   			var response = req.responseText;
-	   			document.getElementById('here').innerHTML = response;
-
+	   			var brokenstring = JSON.parse(response);
+				var numbuyorders = 0;
+				var numsellorders = 0;
+				var timestamp_last = (new Date()).getTime() - top.document.runBot.orderlife.value*60*1000;
+				var timestamp_created;
+				var v1;
+				var v2;
+				var deltatime;
+				if (brokenstring.success) {
+				document.getElementById('orders').innerHTML = "";
+					for (var key in brokenstring["return"]) {
+					  timestamp_created = brokenstring["return"][key]["timestamp_created"]*1000;
+					  deltatime = timestamp_created - timestamp_last;
+					  if (deltatime < 0) {
+						cancelOrder(""+superHost+"/api.php?method=CancelOrder&key="+top.document.runBot.key.value+"&secret="+top.document.runBot.secret.value+"&order_id="+key);
+					  } else {
+					  		v1 = (brokenstring["return"][key]["pair"]).substring(0,3);
+							v2 = (brokenstring["return"][key]["pair"]).substring(4);
+						if (brokenstring["return"][key]["type"] == "buy") {
+							document.getElementById('orders').innerHTML += "<span style=\"color: #008000; font-weight: bold;\">BUY</span> "+brokenstring["return"][key]["amount"]+" "+v1.toUpperCase()+" @ "+brokenstring["return"][key]["rate"]+" "+v2.toUpperCase()+"<br>";
+							numbuyorders++;
+						}
+						if (brokenstring["return"][key]["type"] == "sell") {
+							document.getElementById('orders').innerHTML += "<span style=\"color: #FF0000; font-weight: bold;\">SELL</span> "+brokenstring["return"][key]["amount"]+" "+v1.toUpperCase()+" @ "+brokenstring["return"][key]["rate"]+" "+v2.toUpperCase()+"<br>";
+							numsellorders++;
+						}
+						top.document.runBot.numbuyorders.value = numbuyorders;
+						top.document.runBot.numsellorders.value = numsellorders;
+					  }
+					}
+				}
             } else {
-            	document.getElementById('here').innerHTML = "There was a problem while using XMLHTTP:\n" + req.statusText;
+            	document.getElementById('here').innerHTML += "There was a problem while using XMLHTTP:\n" + req.statusText+"<br>";
             }
         }
     };
@@ -353,9 +382,9 @@ var vOne;
 
 function cancelOrder(url) {
 
-var req = getXMLHTTP();
+	var req = getXMLHTTP();
     if (!req) {
-        document.getElementById('here').innerHTML = 'Unable to set up the XHR object.';
+        document.getElementById('here').innerHTML += "Unable to set up the XHR object.<br>";
         return;
     }
     req.onreadystatechange = function() {
@@ -364,11 +393,11 @@ var req = getXMLHTTP();
 	   			var response = req.responseText;
 				var brokenstring = JSON.parse(response);
 			    	if (brokenstring.success) {
-	   					document.getElementById('here').innerHTML = "Order "+brokenstring["return"]["order_id"]+" was cancelled.";
+	   					document.getElementById('here').innerHTML += "Order "+brokenstring["return"]["order_id"]+" was cancelled.<br>";
 			    	}
 
             } else {
-            	document.getElementById('here').innerHTML = "There was a problem while using XMLHTTP:\n" + req.statusText;
+            	document.getElementById('here').innerHTML += "There was a problem while using XMLHTTP:\n" + req.statusText+"<br>";
             }
         }
     };
@@ -383,7 +412,7 @@ var req = getXMLHTTP();
 function sendOrder(url) {
     var req = getXMLHTTP();
     if (!req) {
-        document.getElementById('here').innerHTML = 'Unable to set up the XHR object.';
+        document.getElementById('here').innerHTML += "Unable to set up the XHR object.<br>";
         return;
     }
     req.onreadystatechange = function() {
@@ -392,7 +421,7 @@ function sendOrder(url) {
 	   			 return true;
 
             } else {
-            	document.getElementById('here').innerHTML = "There was a problem while using XMLHTTP:\n" + req.statusText;
+            	document.getElementById('here').innerHTML += "There was a problem while using XMLHTTP:\n" + req.statusText+"<br>";
             }
         }
     };
@@ -494,22 +523,22 @@ function rBot() {
 <tr>
 
 <td width='70'>USD:&nbsp;</td>
-<td><div id='innerUSD'>Loading...</div></td>
+<td width='100'><div id='innerUSD'>Loading...</div></td>
 
 <td width='70'>EUR:&nbsp;</td>
-<td><div id='innerEUR'>Loading...</div></td>
+<td width='100'><div id='innerEUR'>Loading...</div></td>
 
 <td width='70'>RUR:&nbsp;</td>
-<td><div id='innerRUR'>Loading...</div></td>
+<td width='100'><div id='innerRUR'>Loading...</div></td>
 
 <td width='70'>BTC:&nbsp;</td>
-<td><div id='innerBTC'>Loading...</div></td>
+<td width='100'><div id='innerBTC'>Loading...</div></td>
 
 <td width='70'>LTC:&nbsp;</td>
-<td><div id='innerLTC'>Loading...</div></td>
+<td width='100'><div id='innerLTC'>Loading...</div></td>
 
 <td width='70'>NMC:&nbsp;</td>
-<td><div id='innerNMC'>Loading...</div></td>
+<td width=*><div id='innerNMC'>Loading...</div></td>
 
 </tr>
 <tr>
@@ -688,7 +717,7 @@ function rBot() {
 
 </form>
 
-<div id='here'> </div>
+<div id='here'>Loading...<br></div>
 
 </body>
 </html>

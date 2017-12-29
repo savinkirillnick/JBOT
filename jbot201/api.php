@@ -231,7 +231,18 @@ if ($method == 'ActiveOrders') {
 
 	if(isset($_POST['pair'])) { $pair = $_POST['pair']; } elseif(isset($_GET['pair'])) { $pair = $_GET['pair']; } else { $pair = 0; }
 	$result = btce_query($method, array("pair" => "$pair"));
+	echo json_encode($result);
 
+
+}
+
+//---------------------------- cancel Order
+
+if ($method == 'CancelOrder') {
+
+	if(isset($_POST['order_id'])) { $order_id = $_POST['order_id']; } elseif(isset($_GET['order_id'])) { $order_id = $_GET['order_id']; } else { $order_id = 0; }
+	$result = btce_query($method, array("order_id" => "$order_id"));
+	echo json_encode($result);
 }
 
 //---------------------------- TRADE
