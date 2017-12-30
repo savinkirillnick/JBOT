@@ -398,14 +398,13 @@ function sendOrder(url, z) {
 	   			var response = req.responseText;
 				var brokenstring = JSON.parse(response);
 			    	if (brokenstring.success) {
-			    	  var color;
 			    	  if (z == "BUY") {
 					  document.getElementById('here').innerHTML += "<span style=\"color: #008000; font-weight: bold;\">BUY</span> "+top.document.runBot.buyorder.value+" "+(top.document.runBot.pair.value.substring(0,3)).toUpperCase()+" @ "+top.document.runBot.buyprice.value+" "+(top.document.runBot.pair.value.substring(4)).toUpperCase()+"<br>";
 					  top.document.runBot.numbuyorders.value++;
 					  }
 					  if (z == "SELL") {
 					  document.getElementById('here').innerHTML += "<span style=\"color: #ff0000; font-weight: bold;\">SELL</span> "+top.document.runBot.sellorder.value+" "+(top.document.runBot.pair.value.substring(0,3)).toUpperCase()+" @ "+top.document.runBot.sellprice.value+" "+(top.document.runBot.pair.value.substring(4)).toUpperCase()+"<br>";
-					  top.document.runBot.numbuyorders.value++;
+					  top.document.runBot.numsellorders.value++;
 					  }
 			    	}
             } else {
