@@ -121,6 +121,7 @@ function loadSettings () {
 			if (brokenstring.strategy == 'inner') {top.document.getElementById('strategy').options[0].setAttribute('selected', 'selected');}
 			if (brokenstring.strategy == 'outer') {top.document.getElementById('strategy').options[1].setAttribute('selected', 'selected');}
 			if (brokenstring.strategy == 'step') {top.document.getElementById('strategy').options[2].setAttribute('selected', 'selected');}
+			if (brokenstring.strategy == 'scalper') {top.document.getElementById('strategy').options[3].setAttribute('selected', 'selected');}
 		top.document.runBot.fee.value = brokenstring.fee;
 		top.document.runBot.deltaprice.value = brokenstring.deltaprice;
 		top.document.runBot.aroundprice.value = brokenstring.aroundprice;
