@@ -25,8 +25,9 @@ WEX jBOT v2.0.1
 <body onLoad='initPage();'>
 <script type="text/javascript" >
 
+var superHost = window.location.protocol+"//"+window.location.hostname+"/jbot201";
 //var superHost = 'http://127.0.0.1/jbot201';
-var superHost = 'http://funnymay.com/jbot201';
+//var superHost = 'http://funnymay.com/jbot201';
 
 /*Cookie_START*/
 
@@ -188,18 +189,18 @@ function getInfo(url) {
 	   			 var response = req.responseText;
 					var brokenstring = JSON.parse(response);
 				    	if (brokenstring.success) {
-							document.getElementById('innerUSD').innerHTML = brokenstring.usd;
-							document.getElementById('innerEUR').innerHTML = brokenstring.eur;
-							document.getElementById('innerRUR').innerHTML = brokenstring.rur;
-							document.getElementById('innerBTC').innerHTML = brokenstring.btc;
-							document.getElementById('innerLTC').innerHTML = brokenstring.ltc;
-							document.getElementById('innerNMC').innerHTML = brokenstring.nmc;
-							document.getElementById('innerNVC').innerHTML = brokenstring.nvc;
-							document.getElementById('innerPPC').innerHTML = brokenstring.ppc;
-							document.getElementById('innerDSH').innerHTML = brokenstring.dsh;
-							document.getElementById('innerETH').innerHTML = brokenstring.eth;
-							document.getElementById('innerBCH').innerHTML = brokenstring.bch;
-							document.getElementById('innerZEC').innerHTML = brokenstring.zec;
+							document.getElementById('innerUSD').innerHTML = brokenstring["return"]["funds"]["usd"];
+							document.getElementById('innerEUR').innerHTML = brokenstring["return"]["funds"]["eur"];
+							document.getElementById('innerRUR').innerHTML = brokenstring["return"]["funds"]["rur"];
+							document.getElementById('innerBTC').innerHTML = brokenstring["return"]["funds"]["btc"];
+							document.getElementById('innerLTC').innerHTML = brokenstring["return"]["funds"]["ltc"];
+							document.getElementById('innerNMC').innerHTML = brokenstring["return"]["funds"]["nmc"];
+							document.getElementById('innerNVC').innerHTML = brokenstring["return"]["funds"]["nvc"];
+							document.getElementById('innerPPC').innerHTML = brokenstring["return"]["funds"]["ppc"];
+							document.getElementById('innerDSH').innerHTML = brokenstring["return"]["funds"]["dsh"];
+							document.getElementById('innerETH').innerHTML = brokenstring["return"]["funds"]["eth"];
+							document.getElementById('innerBCH').innerHTML = brokenstring["return"]["funds"]["bch"];
+							document.getElementById('innerZEC').innerHTML = brokenstring["return"]["funds"]["zec"];
 					    }
 
             } else {
@@ -283,6 +284,8 @@ var req = getXMLHTTP();
 				var deltatime;
 				if (brokenstring.success) {
 				document.getElementById('orders').innerHTML = "";
+				top.document.runBot.numbuyorders.value = 0;
+				top.document.runBot.numsellorders.value = 0;
 					for (var key in brokenstring["return"]) {
 					  timestamp_created = brokenstring["return"][key]["timestamp_created"]*1000;
 					  deltatime = timestamp_created - timestamp_last;
@@ -383,7 +386,7 @@ function cancelOrder(url) {
 
 /*SEND ORDER*/
 
-function sendOrder(url) {
+function sendOrder(url, z) {
     var req = getXMLHTTP();
     if (!req) {
         document.getElementById('here').innerHTML += "Unable to set up the XHR object.<br>";
@@ -392,8 +395,19 @@ function sendOrder(url) {
     req.onreadystatechange = function() {
         if (req.readyState == 4) {
             if (req.status == 200) {
-	   			 return true;
-
+	   			var response = req.responseText;
+				var brokenstring = JSON.parse(response);
+			    	if (brokenstring.success) {
+			    	  var color;
+			    	  if (z == "BUY") {
+					  document.getElementById('here').innerHTML += "<span style=\"color: #008000; font-weight: bold;\">BUY</span> "+top.document.runBot.buyorder.value+" "+(top.document.runBot.pair.value.substring(0,3)).toUpperCase()+" @ "+top.document.runBot.buyprice.value+" "+(top.document.runBot.pair.value.substring(4)).toUpperCase()+"<br>";
+					  top.document.runBot.numbuyorders.value++;
+					  }
+					  if (z == "SELL") {
+					  document.getElementById('here').innerHTML += "<span style=\"color: #ff0000; font-weight: bold;\">SELL</span> "+top.document.runBot.sellorder.value+" "+(top.document.runBot.pair.value.substring(0,3)).toUpperCase()+" @ "+top.document.runBot.sellprice.value+" "+(top.document.runBot.pair.value.substring(4)).toUpperCase()+"<br>";
+					  top.document.runBot.numbuyorders.value++;
+					  }
+			    	}
             } else {
             	document.getElementById('here').innerHTML += "There was a problem while using XMLHTTP:\n" + req.statusText+"<br>";
             }
@@ -407,15 +421,15 @@ function sendBuyOrder(){
 	controlBuyPrice();
 	if (top.document.runBot.buycontrol.value == 1 && top.document.runBot.buyoption.value == 1 && top.document.runBot.numbuyorders.value <= top.document.runBot.maxorders.value) {
 	 var url = ""+superHost+"/api.php?method=Trade&key="+top.document.runBot.key.value+"&secret="+top.document.runBot.secret.value+"&pair="+top.document.runBot.pair.value+"&type=buy&amount="+top.document.runBot.buyorder.value+"&rate="+top.document.runBot.buyprice.value;
-	 sendOrder(url);
+	 sendOrder(url, "BUY");
 	}
 }
 
 function sendSellOrder(){
 	controlSellPrice();
 	if (top.document.runBot.sellcontrol.value == 1 && top.document.runBot.selloption.value == 1 && top.document.runBot.numsellorders.value <= top.document.runBot.maxorders.value) {
-	 var url = ""+superHost+"/api.php?method=Trade&key="+top.document.runBot.key.value+"&secret="+top.document.runBot.secret.value+"&pair="+top.document.runBot.pair.value+"&type=sell&amount="+top.document.runBot.buyorder.value+"&rate="+top.document.runBot.buyprice.value;
-	 sendOrder(url);
+	 var url = ""+superHost+"/api.php?method=Trade&key="+top.document.runBot.key.value+"&secret="+top.document.runBot.secret.value+"&pair="+top.document.runBot.pair.value+"&type=sell&amount="+top.document.runBot.sellorder.value+"&rate="+top.document.runBot.sellprice.value;
+	 sendOrder(url, "SELL");
 	}
 }
 
@@ -434,6 +448,8 @@ function initPage() {
 	getChart ();
 	//Get Orders
 	getOrders(""+superHost+"/api.php?method=ActiveOrders&key="+top.document.runBot.key.value+"&secret="+top.document.runBot.secret.value+"&pair="+top.document.runBot.pair.value);
+
+	document.getElementById('here').innerHTML += "Bot: <b>"+superHost+"</b> is ready.<br>";
 
 	//Recycle
 	var msec = top.document.runBot.steptime.value*1000;

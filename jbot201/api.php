@@ -201,6 +201,8 @@ function btce_query($method, array $req = array()) {
 if ($method == 'getInfo'){
 
 	$result = btce_query($method);
+	echo json_encode($result);
+/*
 	$text = "{";
 
 	foreach ($result['return']['funds'] as $key => $value ) {
@@ -213,7 +215,7 @@ if ($method == 'getInfo'){
 
 	$text .= "\"success\": 1}";
 	echo $text;
-
+*/
 }
 
 //---------------------------- get History
@@ -253,7 +255,8 @@ if ($method == 'Trade') {
 	if(isset($_POST['type'])) { $type = $_POST['type']; } elseif(isset($_GET['type'])) { $type = $_GET['type']; } else { $type = 0; }
 	if(isset($_POST['amount'])) { $amount = $_POST['amount']; } elseif(isset($_GET['amount'])) { $amount = $_GET['amount']; } else { $amount = 0; }
 	if(isset($_POST['rate'])) { $rate = $_POST['rate']; } elseif(isset($_GET['rate'])) { $rate = $_GET['rate']; } else { $rate = 0; }
-	$result = btce_query("Trade", array("pair" => "$pair", "type" => "$type ", "amount" => $amount, "rate" => $rate));
+	$result = btce_query("Trade", array("pair" => "$pair", "type" => "$type", "amount" => $amount, "rate" => $rate));
+	echo json_encode($result);
 
 }
 
