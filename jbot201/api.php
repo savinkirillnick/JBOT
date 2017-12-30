@@ -320,11 +320,18 @@ if ($method == 'getView') {
 		$high4[$j] = $high[$i];
 		$j++;
 	}
+	$j=0;
+	for ($i=45;$i<=47;$i++){
+		$low5[$j] = $low[$i];
+		$high5[$j] = $high[$i];
+		$j++;
+	}
 
 	$minlow[1] = min($low1);
 	$minlow[2] = min($low2);
 	$minlow[3] = min($low3);
 	$minlow[4] = min($low4);
+	$minlow[5] = min($low5);
 	$minhigh[1] = min($high1);
 	$minhigh[2] = min($high2);
 	$minhigh[3] = min($high3);
@@ -338,6 +345,7 @@ if ($method == 'getView') {
 	$maxhigh[2] = max($high2);
 	$maxhigh[3] = max($high3);
 	$maxhigh[4] = max($high4);
+	$maxhigh[5] = max($high5);
 
 	$maxhigh[0] = max($maxhigh);
 	$minlow[0] = min($minlow);
@@ -357,6 +365,11 @@ if ($method == 'getView') {
 	if ($strategy == 'step') {
 		$buyorder = $minlow[4];
 		$sellorder = $maxhigh[4];
+	}
+
+	if ($strategy == 'scalper') {
+		$buyorder = $minlow[5];
+		$sellorder = $maxhigh[5];
 	}
 
 echo "{\"buyprice\":" . $buyorder . ", \"sellprice\":" . $sellorder . ", \"success\": 1}";
