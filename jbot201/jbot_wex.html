@@ -1,13 +1,13 @@
 <html>
 <head>
 <title>
-WEX jBOT v2.0.1
+WEX jBOT v2.0 r.1
 </title>
 <meta name="description" content="Bitcoin wex.nz j-Bot" />
 <meta property="keywords" content="" />
 <meta property="og:description" content="Bitcoin wex.nz j-Bot" />
 <meta property="og:image" content="http://funnymay.com/images/thumb.jpg" />
-<meta property="og:title" content="WEX jBOT v2.0.1" />
+<meta property="og:title" content="WEX jBOT v2.0" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="http://funnymay.com/" />
   <style type="text/css">
@@ -26,8 +26,6 @@ WEX jBOT v2.0.1
 <script type="text/javascript" >
 
 var superHost = window.location.protocol+"//"+window.location.hostname+"/jbot201";
-//var superHost = 'http://127.0.0.1/jbot201';
-//var superHost = 'http://funnymay.com/jbot201';
 
 /*Cookie_START*/
 
@@ -338,6 +336,7 @@ var amount = document.getElementById(vOne).innerHTML;
 		}
 
 	}
+
 }
 
 function controlSellPrice() {
@@ -345,15 +344,17 @@ var com = top.document.runBot.sellorder.value;
 var pair = top.document.runBot.pair.value;
 var vOne;
 vOne = "inner"+(pair.substring(0,3)).toUpperCase();
-var amount = document.getElementById(vOne).innerHTML;
-	if (com > amount || top.document.runBot.sellorder.value <= 0.001) {
-	document.getElementById('sellorder').style.background = '#FBB';
-	document.getElementById('sellprice').style.background = '#FBB';
-	top.document.runBot.sellcontrol.value = 0;
-	} else {
-	document.getElementById('sellorder').style.background = '#333';
-	document.getElementById('sellprice').style.background = '#333';
-	top.document.runBot.sellcontrol.value = 1;
+var amount = document.getElementById(vOne).innerHTML-0;
+	if (top.document.runBot.sellorder.value >= 0.001) {
+		if (com >= amount) {
+		document.getElementById('sellorder').style.background = '#FBB';
+		document.getElementById('sellprice').style.background = '#FBB';
+		top.document.runBot.sellcontrol.value = 0;
+		} else {
+		document.getElementById('sellorder').style.background = '#333';
+		document.getElementById('sellprice').style.background = '#333';
+		top.document.runBot.sellcontrol.value = 1;
+		}
 	}
 }
 
@@ -709,7 +710,7 @@ function rBot() {
 
 </form>
 <div id='here'>LOGS:<br>Loading...<br></div>
-<div hidden id='debug'>Loading...<br></div>
+<div hidden id='debug'><br><b>DEBUG MODE:</b><br> Loading...<br></div>
 
 </body>
 </html>
