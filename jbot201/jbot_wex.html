@@ -1,7 +1,7 @@
 <html>
 <head>
 <title>
-WEX jBOT v2.0 r.4
+WEX jBOT v2.0 r.5
 </title>
 <meta name="description" content="Bitcoin wex.nz j-Bot" />
 <meta property="keywords" content="" />
@@ -346,7 +346,7 @@ var vOne;
 vOne = "inner"+(pair.substring(0,3)).toUpperCase();
 var amount = document.getElementById(vOne).innerHTML-0;
 	if (top.document.runBot.sellorder.value >= 0.001) {
-		if (com >= amount || top.document.runBot.numsellorders.value >= top.document.runBot.maxorders.value) {
+		if (com > amount || top.document.runBot.numsellorders.value >= top.document.runBot.maxorders.value) {
 		document.getElementById('sellorder').style.background = '#FBB';
 		document.getElementById('sellprice').style.background = '#FBB';
 		top.document.runBot.sellcontrol.value = 0;
