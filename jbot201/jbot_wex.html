@@ -322,12 +322,12 @@ var req = getXMLHTTP();
 
 function controlBuyPrice() {
 var com = top.document.runBot.buyorder.value*top.document.runBot.buyprice.value;
-var pair = top.document.getElementById('pair').value;
+var pair = top.document.runBot.pair.value;
 var vOne;
 vOne = "inner"+(pair.substring(4)).toUpperCase();
-var amusd = document.getElementById(vOne).innerHTML;
+var amount = document.getElementById(vOne).innerHTML;
 	if (top.document.runBot.buyorder.value >= 0.001) {
-		if (com > amusd) {
+		if (com > amount) {
 		document.getElementById('buyorder').style.background = '#FBB';
 		document.getElementById('buyprice').style.background = '#FBB';
 		top.document.runBot.buycontrol.value = 0;
@@ -342,19 +342,19 @@ var amusd = document.getElementById(vOne).innerHTML;
 
 function controlSellPrice() {
 var com = top.document.runBot.sellorder.value;
-var pair = top.document.getElementById('pair').value;
+var pair = top.document.runBot.pair.value;
 var vOne;
 vOne = "inner"+(pair.substring(0,3)).toUpperCase();
-	var ambtc = document.getElementById(vOne).innerHTML;
-		if (com > ambtc || top.document.runBot.sellorder.value <= 0.001) {
-		document.getElementById('sellorder').style.background = '#FBB';
-		document.getElementById('sellprice').style.background = '#FBB';
-		top.document.runBot.sellcontrol.value = 0;
-		} else {
-		document.getElementById('sellorder').style.background = '#333';
-		document.getElementById('sellprice').style.background = '#333';
-		top.document.runBot.sellcontrol.value = 1;
-		}
+var amount = document.getElementById(vOne).innerHTML;
+	if (com > amount || top.document.runBot.sellorder.value <= 0.001) {
+	document.getElementById('sellorder').style.background = '#FBB';
+	document.getElementById('sellprice').style.background = '#FBB';
+	top.document.runBot.sellcontrol.value = 0;
+	} else {
+	document.getElementById('sellorder').style.background = '#333';
+	document.getElementById('sellprice').style.background = '#333';
+	top.document.runBot.sellcontrol.value = 1;
+	}
 }
 
 function cancelOrder(url) {
