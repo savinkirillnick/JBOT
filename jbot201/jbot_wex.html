@@ -1,7 +1,7 @@
 <html>
 <head>
 <title>
-WEX jBOT v2.0 r.3
+WEX jBOT v2.0 r.4
 </title>
 <meta name="description" content="Bitcoin wex.nz j-Bot" />
 <meta property="keywords" content="" />
@@ -293,11 +293,11 @@ var req = getXMLHTTP();
 					  		v1 = (brokenstring["return"][key]["pair"]).substring(0,3);
 							v2 = (brokenstring["return"][key]["pair"]).substring(4);
 						if (brokenstring["return"][key]["type"] == "buy") {
-							document.getElementById('orders').innerHTML += "<span style=\"color: #008000; font-weight: bold;\">BUY</span> "+brokenstring["return"][key]["amount"]+" "+v1.toUpperCase()+" @ "+brokenstring["return"][key]["rate"]+" "+v2.toUpperCase()+" <b><span onClick=\"cancelOrder("+key+")\" style=\"cursor: pointer; cursor: hand;\">[x]</span></b><br>";
+							document.getElementById('orders').innerHTML += "<span style=\"color: #008000; font-weight: bold;\">BUY</span> "+brokenstring["return"][key]["amount"]+" "+v1.toUpperCase()+" @ "+brokenstring["return"][key]["rate"]+" "+v2.toUpperCase()+" <b><span onClick=\"cancelOrder("+superHost+"/api.php?method=CancelOrder&key="+top.document.runBot.key.value+"&secret="+top.document.runBot.secret.value+"&order_id="+key+")\" style=\"cursor: pointer; cursor: hand;\">[x]</span></b><br>";
 							numbuyorders++;
 						}
 						if (brokenstring["return"][key]["type"] == "sell") {
-							document.getElementById('orders').innerHTML += "<span style=\"color: #FF0000; font-weight: bold;\">SELL</span> "+brokenstring["return"][key]["amount"]+" "+v1.toUpperCase()+" @ "+brokenstring["return"][key]["rate"]+" "+v2.toUpperCase()+" <b><span onClick=\"cancelOrder("+key+")\" style=\"cursor: pointer; cursor: hand;\">[x]</span></b><br>";
+							document.getElementById('orders').innerHTML += "<span style=\"color: #FF0000; font-weight: bold;\">SELL</span> "+brokenstring["return"][key]["amount"]+" "+v1.toUpperCase()+" @ "+brokenstring["return"][key]["rate"]+" "+v2.toUpperCase()+" <b><span onClick=\"cancelOrder("+superHost+"/api.php?method=CancelOrder&key="+top.document.runBot.key.value+"&secret="+top.document.runBot.secret.value+"&order_id="+key+")\" style=\"cursor: pointer; cursor: hand;\">[x]</span></b><br>";
 							numsellorders++;
 						}
 						top.document.runBot.numbuyorders.value = numbuyorders;
