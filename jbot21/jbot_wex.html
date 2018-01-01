@@ -1,7 +1,16 @@
 <html>
 <head>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-47078483-4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-47078483-4');
+</script>
 <title>
-WEX jBOT v2.1 u.1
+WEX jBOT v2.1 u.2
 </title>
 <meta name="description" content="Bitcoin wex.nz j-Bot" />
 <meta property="keywords" content="" />
@@ -32,7 +41,7 @@ var hostString = window.location.protocol+"//"+window.location.hostname+"/jbot21
 var pairs = ["btc_usd","btc_rur","btc_eur","ltc_btc","ltc_usd","ltc_rur","ltc_eur","nmc_btc","nmc_usd","nvc_btc","nvc_usd","usd_rur","eur_usd","eur_rur","ppc_btc","ppc_usd","dsh_btc","dsh_usd","dsh_rur","dsh_eur","dsh_ltc","dsh_eth","eth_btc","eth_usd","eth_eur","eth_ltc","eth_rur","bch_usd","bch_btc","bch_rur","bch_eur","bch_ltc","bch_eth","bch_dsh","zec_btc","zec_usd"];
 
 //iDebugMode. Activity
-var iD = 0; // 1 or 0
+var iD = 1; // 1 or 0
 var iNum = 0;
 
 //Counter Activity
@@ -385,7 +394,7 @@ if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " &nbsp;&
 
 		top.document.runBot.sellOrder.style.background = '#333';
 		top.document.runBot.sellPrice.style.background = '#333';
-		top.document.runBot.sellcontrol.value = 1;
+		top.document.runBot.sellControl.value = 1;
 		}
 	}
 
@@ -550,8 +559,9 @@ if (iFoo == 4) {
 	} else {
 		if (top.document.runBot.botIsRun.value == 1) {
 			top.document.runBot.buyOrder.value = top.document.runBot.stepMount.value;
-			top.document.runBot.sellOrder.value = top.document.runBot.stepMount.value*(100-top.document.runBot.fee.value)/100;
 			sendBuyOrder();
+
+			top.document.runBot.sellOrder.value = top.document.runBot.stepMount.value*(100-top.document.runBot.fee.value)/100;
 			sendSellOrder();
 		}
 	}
