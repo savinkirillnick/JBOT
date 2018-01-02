@@ -10,7 +10,7 @@
   gtag('config', 'UA-47078483-4');
 </script>
 <title>
-WEX jBOT v2.1 u.3
+WEX jBOT v2.1 u.4
 </title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="Bitcoin wex.nz j-Bot" />
@@ -842,7 +842,7 @@ if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " <b>init
 	<tr><td>BUY<br>
 	<input type='text' name='buyOrder' placeholder='min 0.001' size='5' onChange='controlBuyPrice()'><br>
 	<input type='text' name='buyPrice' placeholder='price' size='5' onChange='controlBuyPrice()'><br>
-	<input type='text' hidden name='buyControl'>
+	<input type='text' hidden name='buyControl' onChange='controlBuyPrice()'>
 	<select name='buyOption'>
 	  <option value='0' selected>Disallow</option>
 	  <option value='1'>Allow</option>
@@ -851,7 +851,7 @@ if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " <b>init
 	</td><td>SELL<br>
 	<input type='text' name='sellOrder' placeholder='min 0.001' size='5' onChange='controlSellPrice()'><br>
 	<input type='text' name='sellPrice' placeholder='price' size='5' onChange='controlSellPrice()'><br>
-	<input type='text' hidden name='sellControl'>
+	<input type='text' hidden name='sellControl' onChange='controlSellPrice()'>
 	<select name='sellOption'>
 	  <option value='0' selected>Disallow</option>
 	  <option value='1'>Allow</option>
