@@ -10,7 +10,7 @@
   gtag('config', 'UA-47078483-4');
 </script>
 <title>
-WEX jBOT v2.1 u.4
+WEX jBOT v2.1 u.5
 </title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="Bitcoin wex.nz j-Bot" />
@@ -42,7 +42,7 @@ var hostString = window.location.protocol+"//"+window.location.hostname+"/jbot21
 var pairs = ["btc_usd","btc_rur","btc_eur","ltc_btc","ltc_usd","ltc_rur","ltc_eur","nmc_btc","nmc_usd","nvc_btc","nvc_usd","usd_rur","eur_usd","eur_rur","ppc_btc","ppc_usd","dsh_btc","dsh_usd","dsh_rur","dsh_eur","dsh_ltc","dsh_eth","eth_btc","eth_usd","eth_eur","eth_ltc","eth_rur","bch_usd","bch_btc","bch_rur","bch_eur","bch_ltc","bch_eth","bch_dsh","zec_btc","zec_usd"];
 
 //iDebugMode. Activity
-var iD = 0; // 1 or 0
+var iD = 1; // 1 or 0
 var iNum = 0;
 
 //Counter Activity
@@ -122,7 +122,6 @@ function setCookie(name, value, props) {
 if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " <b>setCookie(name, value, props)</b> called.<br>";}
 if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " &nbsp;&nbsp;&nbsp;&nbsp;<b>name</b> = "+name+"<br>";}
 if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " &nbsp;&nbsp;&nbsp;&nbsp;<b>value</b> = "+value+"<br>";}
-if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " &nbsp;&nbsp;&nbsp;&nbsp;<b>props</b> = "+props+"<br>";}
 
     props = props || {}
     var exp = props.expires
@@ -162,7 +161,7 @@ if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " <b>save
 	var date = new Date;
 	date.setDate( date.getDate() + 365 );
 
-	var cookieString = '{"set": 1, "key": "'+top.document.runBot.key.value+'", "secret": "'+top.document.runBot.secret.value+'", "pair": "'+top.document.runBot.pair.value+'", "fee": "'+top.document.runBot.fee.value+'", "strategy": "'+top.document.runBot.strategy.value+'", "deltaPrice": "'+top.document.runBot.deltaPrice.value+'", "aroundPrice": "'+top.document.runBot.aroundPrice.value+'", "stepMount": "'+top.document.runBot.stepMount.value+'", "stepDistance": "'+top.document.runBot.stepDistance.value+'", "maxOrders": "'+top.document.runBot.maxOrders.value+'", "stepTime": "'+top.document.runBot.stepTime.value+'", "orderLife": "'+top.document.runBot.orderLife.value+'"}';
+	var cookieString = '{"set": "'+top.document.runBot.botSet.value+'", "key": "'+top.document.runBot.key.value+'", "secret": "'+top.document.runBot.secret.value+'", "pair": "'+top.document.runBot.pair.value+'", "fee": "'+top.document.runBot.fee.value+'", "strategy": "'+top.document.runBot.strategy.value+'", "deltaPrice": "'+top.document.runBot.deltaPrice.value+'", "aroundPrice": "'+top.document.runBot.aroundPrice.value+'", "stepMount": "'+top.document.runBot.stepMount.value+'", "stepDistance": "'+top.document.runBot.stepDistance.value+'", "maxOrders": "'+top.document.runBot.maxOrders.value+'", "stepTime": "'+top.document.runBot.stepTime.value+'", "orderLife": "'+top.document.runBot.orderLife.value+'"}';
 if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " &nbsp;&nbsp;&nbsp;&nbsp;<b>cookieString</b> = "+cookieString+"<br>";}
 
 	setCookie('wex_set_'+top.document.runBot.botSet.value, cookieString, { expires: date.toUTCString() });
@@ -180,8 +179,9 @@ if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " &nbsp;&
 		var brokenString = JSON.parse(settingsString);
 		top.document.runBot.key.value = brokenString.key;
 		top.document.runBot.secret.value = brokenString.secret;
-		top.document.runBot.pair.options[(brokenString.pair)].setAttribute('selected', 'selected');
-		top.document.runBot.strategy.options[(brokenString.strategy)].setAttribute('selected', 'selected');
+if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " &nbsp;&nbsp;&nbsp;&nbsp;<b>Pair Options</b> = "+top.document.runBot.pair.options.length+"<br>";}
+		top.document.runBot.pair.selectedIndex = brokenString.pair;
+		top.document.runBot.strategy.selectedIndex = brokenString.strategy;
 		top.document.runBot.fee.value = brokenString.fee;
 		top.document.runBot.deltaPrice.value = brokenString.deltaPrice;
 		top.document.runBot.aroundPrice.value = brokenString.aroundPrice;
@@ -554,6 +554,7 @@ function refreshData () {
 
 if (iProg >= 70) {
 	document.getElementById('progress_bar').innerHTML = "Progress: ";
+	iProg = 0;
 }
 
 if (iFoo == 1) {
@@ -724,42 +725,42 @@ if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " <b>init
 </td>
 <td width='8%'>
 <select name='pair' onChange='getChart();'>
-  <option value='0'>BTC/USD</option>
-  <option value='1'>BTC/RUR</option>
-  <option value='2'>BTC/EUR</option>
-  <option value='3'>LTC/BTC</option>
-  <option value='4'>LTC/USD</option>
-  <option value='5'>LTC/RUR</option>
-  <option value='6'>LTC/EUR</option>
-  <option value='7'>NMC/BTC</option>
-  <option value='8'>NMC/USD</option>
-  <option value='9'>NVC/BTC</option>
-  <option value='10'>NVC/USD</option>
-  <option value='11'>USD/RUR</option>
-  <option value='12'>EUR/USD</option>
-  <option value='13'>EUR/RUR</option>
-  <option value='14'>PPC/BTC</option>
-  <option value='15'>PPC/USD</option>
-  <option value='16'>DSH/BTC</option>
-  <option value='17'>DSH/USD</option>
-  <option value='18'>DSH/RUR</option>
-  <option value='19'>DSH/EUR</option>
-  <option value='20'>DSH/LTC</option>
-  <option value='21'>DSH/ETH</option>
-  <option value='22'>ETH/BTC</option>
-  <option value='23'>ETH/USD</option>
-  <option value='24'>ETH/EUR</option>
-  <option value='25'>ETH/LTC</option>
-  <option value='26'>ETH/RUR</option>
-  <option value='27'>BCH/USD</option>
-  <option value='28'>BCH/BTC</option>
-  <option value='29'>BCH/RUR</option>
-  <option value='30'>BCH/EUR</option>
-  <option value='31'>BCH/LTC</option>
-  <option value='32'>BCH/ETH</option>
-  <option value='33'>BCH/DSH</option>
-  <option value='34'>ZEC/BTC</option>
-  <option value='35'>ZEC/USD</option>
+  <option value=0>BTC/USD</option>
+  <option value=1>BTC/RUR</option>
+  <option value=2>BTC/EUR</option>
+  <option value=3>LTC/BTC</option>
+  <option value=4>LTC/USD</option>
+  <option value=5>LTC/RUR</option>
+  <option value=6>LTC/EUR</option>
+  <option value=7>NMC/BTC</option>
+  <option value=8>NMC/USD</option>
+  <option value=9>NVC/BTC</option>
+  <option value=10>NVC/USD</option>
+  <option value=11>USD/RUR</option>
+  <option value=12>EUR/USD</option>
+  <option value=13>EUR/RUR</option>
+  <option value=14>PPC/BTC</option>
+  <option value=15>PPC/USD</option>
+  <option value=16>DSH/BTC</option>
+  <option value=17>DSH/USD</option>
+  <option value=18>DSH/RUR</option>
+  <option value=19>DSH/EUR</option>
+  <option value=20>DSH/LTC</option>
+  <option value=21>DSH/ETH</option>
+  <option value=22>ETH/BTC</option>
+  <option value=23>ETH/USD</option>
+  <option value=24>ETH/EUR</option>
+  <option value=25>ETH/LTC</option>
+  <option value=26>ETH/RUR</option>
+  <option value=27>BCH/USD</option>
+  <option value=28>BCH/BTC</option>
+  <option value=29>BCH/RUR</option>
+  <option value=30>BCH/EUR</option>
+  <option value=31>BCH/LTC</option>
+  <option value=32>BCH/ETH</option>
+  <option value=33>BCH/DSH</option>
+  <option value=34>ZEC/BTC</option>
+  <option value=35>ZEC/USD</option>
 </select>
 </td>
 
@@ -780,10 +781,10 @@ if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " <b>init
 </td>
 <td>
 <select id='strategy' name='strategy'>
-  <option value='0'>INNER</option>
-  <option value='1'>OUTER</option>
-  <option value='2'>STEP</option>
-  <option value='3'>SCALPER</option>
+  <option value=0>INNER</option>
+  <option value=1>OUTER</option>
+  <option value=2>STEP</option>
+  <option value=3>SCALPER</option>
 </select>
 </td>
 <td align='right'>Around&nbsp;
