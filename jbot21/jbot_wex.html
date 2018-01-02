@@ -617,7 +617,7 @@ if (iD) {document.getElementById('debug_logs').style.display = "block";}
 
 	setInterval(refreshData, msec);
 
-if (iD) {document.getElementById('logs').innerHTML += "JBOT is ready.<br>";}
+document.getElementById('logs').innerHTML += "JBOT is ready.<br>";
 if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " <b>initPage()</b> finished.<br>";}
 }
 
@@ -632,11 +632,11 @@ if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " <b>init
 	if (top.document.runBot.botIsRun.value != 1){
 		top.document.runBot.botIsRun.value = 1;
 		top.document.runBot.runBotButton.value = 'Stop Bot';
-if (iD) {document.getElementById('logs').innerHTML += "JBOT started.<br>";}
+		document.getElementById('logs').innerHTML += "JBOT started.<br>";
 	} else {
 		top.document.runBot.botIsRun.value = 0;
 		top.document.runBot.runBotButton.value = 'Run Bot';
-if (iD) {document.getElementById('logs').innerHTML += "JBOT stopped.<br>";}
+		document.getElementById('logs').innerHTML += "JBOT stopped.<br>";
 	}
 
 if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " <b>initBot()</b> finished.<br>";}
