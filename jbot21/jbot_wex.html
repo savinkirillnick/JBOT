@@ -10,8 +10,9 @@
   gtag('config', 'UA-47078483-4');
 </script>
 <title>
-WEX jBOT v2.1 u.2
+WEX jBOT v2.1 u.3
 </title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="Bitcoin wex.nz j-Bot" />
 <meta property="keywords" content="" />
 <meta property="og:description" content="Bitcoin wex.nz j-Bot" />
@@ -46,6 +47,9 @@ var iNum = 0;
 
 //Counter Activity
 var iFoo = 1;
+
+//Progress Bar
+var iProg = 0;
 
 /*Global Variables OK*/
 </script>
@@ -234,6 +238,7 @@ if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " &nbsp;&
 		document.getElementById('logs').innerHTML += "There was a problem while using XMLHTTP:\n" + req.statusText+"<br>";
 	}
 
+document.getElementById('progress_bar').innerHTML += "&#9618;";
 if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " <b>getInfo()</b> finished.<br>";}
 }
 
@@ -282,11 +287,11 @@ if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " &nbsp;&
 			  		v1 = (brokenString["return"][key]["pair"]).substring(0,3);
 					v2 = (brokenString["return"][key]["pair"]).substring(4);
 				if (brokenString["return"][key]["type"] == "buy") {
-					document.getElementById('orders').innerHTML += "<div id=\"id"+key+"\"><span style=\"color: #008000; font-weight: bold;\">BUY</span> "+brokenString["return"][key]["amount"]+" "+v1.toUpperCase()+" @ "+brokenString["return"][key]["rate"]+" "+v2.toUpperCase()+" <b><span onClick=\"cancelOrder("+key+")\" style=\"cursor: pointer; cursor: hand;\">[x]</span></b></div>";
+					document.getElementById('orders').innerHTML += "<div id=\"id"+key+"\" style=\"white-space: nowrap;\"><span style=\"color: #008000; font-weight: bold;\">BUY</span> "+brokenString["return"][key]["amount"]+" "+v1.toUpperCase()+" @ "+brokenString["return"][key]["rate"]+" "+v2.toUpperCase()+" <b><span onClick=\"cancelOrder("+key+")\" style=\"cursor: pointer; cursor: hand;\">[x]</span></b></div>";
 					top.document.runBot.numBuyOrders.value++;
 				}
 				if (brokenString["return"][key]["type"] == "sell") {
-					document.getElementById('orders').innerHTML += "<div id=\"id"+key+"\"><span style=\"color: #FF0000; font-weight: bold;\">SELL</span> "+brokenString["return"][key]["amount"]+" "+v1.toUpperCase()+" @ "+brokenString["return"][key]["rate"]+" "+v2.toUpperCase()+" <b><span onClick=\"cancelOrder("+key+")\" style=\"cursor: pointer; cursor: hand;\">[x]</span></b></div>";
+					document.getElementById('orders').innerHTML += "<div id=\"id"+key+"\" style=\"white-space: nowrap;\"><span style=\"color: #FF0000; font-weight: bold;\">SELL</span> "+brokenString["return"][key]["amount"]+" "+v1.toUpperCase()+" @ "+brokenString["return"][key]["rate"]+" "+v2.toUpperCase()+" <b><span onClick=\"cancelOrder("+key+")\" style=\"cursor: pointer; cursor: hand;\">[x]</span></b></div>";
 					top.document.runBot.numSellOrders.value++;
 				}
 			  }
@@ -296,6 +301,7 @@ if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " &nbsp;&
     	document.getElementById('logs').innerHTML += "There was a problem while using XMLHTTP:\n" + req.statusText+"<br>";
     }
 
+document.getElementById('progress_bar').innerHTML += "&#9618;";
 if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " <b>getOrders()</b> finished.<br>";}
 }
 
@@ -340,6 +346,7 @@ if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " &nbsp;&
     	document.getElementById('logs').innerHTML += "There was a problem while using XMLHTTP:\n" + req.statusText+"<br>";
     }
 
+document.getElementById('progress_bar').innerHTML += "&#9618;";
 if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " <b>getView()</b> finished.<br>";}
 }
 
@@ -435,6 +442,7 @@ req.send();
 		document.getElementById('logs').innerHTML += "There was a problem while using XMLHTTP:\n" + req.statusText+"<br>";
 	}
 
+document.getElementById('progress_bar').innerHTML += "&#9668;";
 if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " <b>cancelOrder()</b> finished.<br>";}
 }
 
@@ -451,7 +459,7 @@ if (type == "BUY") {
 	url = ""+hostString+"/api_wex.php?method=Trade&key="+top.document.runBot.key.value+"&secret="+top.document.runBot.secret.value+"&pair="+pairs[top.document.runBot.pair.value]+"&type=buy&amount="+top.document.runBot.buyOrder.value+"&rate="+top.document.runBot.buyPrice.value;
 }
 if (type == "SELL") {
-	url = ""+hostString+"/api_wex.php?method=Trade&key="+top.document.runBot.key.value+"&secret="+top.document.runBot.secret.value+"&pair="+pairs[top.document.runBot.pair.value]+"&type=sell&amount="+top.document.runBot.sellorder.value+"&rate="+top.document.runBot.sellPrice.value;
+	url = ""+hostString+"/api_wex.php?method=Trade&key="+top.document.runBot.key.value+"&secret="+top.document.runBot.secret.value+"&pair="+pairs[top.document.runBot.pair.value]+"&type=sell&amount="+top.document.runBot.sellOrder.value+"&rate="+top.document.runBot.sellPrice.value;
 }
 
 var req = getXMLHTTP();
@@ -475,8 +483,9 @@ if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " &nbsp;&
 		var v2 = (pairs[top.document.runBot.pair.value]).substring(4);
 		  if (type == "BUY") {
 		  document.getElementById('logs').innerHTML += "<span style=\"color: #008000; font-weight: bold;\">BUY</span> "+top.document.runBot.buyOrder.value+" "+v1.toUpperCase()+" @ "+top.document.runBot.buyPrice.value+" "+v2.toUpperCase()+"<br>";
-		  document.getElementById('orders').innerHTML += "<div id=\"id"+brokenString["return"]["order_id"]+"\"><span style=\"color: #008000; font-weight: bold;\">BUY</span> "+top.document.runBot.buyOrder.value+" "+v1.toUpperCase()+" @ "+top.document.runBot.buyPrice.value+" "+v2.toUpperCase()+" <b><span onClick=\"cancelOrder("+brokenString["return"]["order_id"]+")\" style=\"cursor: pointer; cursor: hand;\">[x]</span></b></div>";
+		  document.getElementById('orders').innerHTML += "<div id=\"id"+brokenString["return"]["order_id"]+"\" style=\"white-space: nowrap;\"><span style=\"color: #008000; font-weight: bold;\">BUY</span> "+top.document.runBot.buyOrder.value+" "+v1.toUpperCase()+" @ "+top.document.runBot.buyPrice.value+" "+v2.toUpperCase()+" <b><span onClick=\"cancelOrder("+brokenString["return"]["order_id"]+")\" style=\"cursor: pointer; cursor: hand;\">[x]</span></b></div>";
 		  top.document.runBot.numBuyOrders.value++;
+			document.getElementById('progress_bar').innerHTML += "&#9650;";
 
 		  if (top.document.runBot.numBuyOrders.value >= top.document.runBot.maxOrders.value) {
 			top.document.runBot.buyOrder.style.background = '#FBB';
@@ -487,8 +496,9 @@ if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " &nbsp;&
 		  }
 		  if (type == "SELL") {
 		  document.getElementById('logs').innerHTML += "<span style=\"color: #ff0000; font-weight: bold;\">SELL</span> "+top.document.runBot.sellOrder.value+" "+v1.toUpperCase()+" @ "+top.document.runBot.sellPrice.value+" "+v2.toUpperCase()+"<br>";
-		  document.getElementById('orders').innerHTML += "<div id=\"id"+brokenString["return"]["order_id"]+"\"><span style=\"color: #ff0000; font-weight: bold;\">SELL</span> "+top.document.runBot.sellOrder.value+" "+v1.toUpperCase()+" @ "+top.document.runBot.sellPrice.value+" "+v2.toUpperCase()+" <b><span onClick=\"cancelOrder("+brokenString["return"]["order_id"]+")\" style=\"cursor: pointer; cursor: hand;\">[x]</span></b></div>";
+		  document.getElementById('orders').innerHTML += "<div id=\"id"+brokenString["return"]["order_id"]+"\" style=\"white-space: nowrap;\"><span style=\"color: #ff0000; font-weight: bold;\">SELL</span> "+top.document.runBot.sellOrder.value+" "+v1.toUpperCase()+" @ "+top.document.runBot.sellPrice.value+" "+v2.toUpperCase()+" <b><span onClick=\"cancelOrder("+brokenString["return"]["order_id"]+")\" style=\"cursor: pointer; cursor: hand;\">[x]</span></b></div>";
 		  top.document.runBot.numSellOrders.value++;
+			document.getElementById('progress_bar').innerHTML += "&#9660;";
 
 		  if (top.document.runBot.numSellOrders.value >= top.document.runBot.maxOrders.value) {
 			top.document.runBot.sellOrder.style.background = '#FBB';
@@ -531,6 +541,7 @@ document.getElementById('chart_div').innerHTML = "<iframe src='"+hostString+"/ap
 + "Ваш браузер не поддерживает плавающие фреймы!"
 + "</iframe>";
 
+document.getElementById('progress_bar').innerHTML += "&#9618;";
 if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " <b>getChart()</b> finished.<br>";}
 }
 
@@ -540,6 +551,10 @@ if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " <b>getC
 /*Refresh Data*/
 
 function refreshData () {
+
+if (iProg >= 70) {
+	document.getElementById('progress_bar').innerHTML = "Progress: ";
+}
 
 if (iFoo == 1) {
 	getInfo();
@@ -571,6 +586,7 @@ if (iFoo == 5) {
 	getChart ();
 }
 
+iProg++;
 iFoo++;
 if (iFoo > 5){iFoo = 1;}
 }
@@ -601,6 +617,7 @@ if (iD) {document.getElementById('debug_logs').style.display = "block";}
 
 	setInterval(refreshData, msec);
 
+if (iD) {document.getElementById('logs').innerHTML += "JBOT is ready.<br>";}
 if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " <b>initPage()</b> finished.<br>";}
 }
 
@@ -615,9 +632,11 @@ if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " <b>init
 	if (top.document.runBot.botIsRun.value != 1){
 		top.document.runBot.botIsRun.value = 1;
 		top.document.runBot.runBotButton.value = 'Stop Bot';
+if (iD) {document.getElementById('logs').innerHTML += "JBOT started.<br>";}
 	} else {
 		top.document.runBot.botIsRun.value = 0;
 		top.document.runBot.runBotButton.value = 'Run Bot';
+if (iD) {document.getElementById('logs').innerHTML += "JBOT stopped.<br>";}
 	}
 
 if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " <b>initBot()</b> finished.<br>";}
@@ -854,7 +873,7 @@ if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " <b>init
 </table>
 
 </form>
-
+<div id='progress_bar'>Progress: </div>
 <div id='logs'>LOGS:<br>Loading...<br></div>
 
 </td>
