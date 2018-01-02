@@ -1,8 +1,24 @@
+//EN
+JBOT Automatic trading system for the crypto currency exchange wex.nz
+
+Installation:
+
+To run the code, you need a server with a configured php and with extension of curl_php
+
+If your server is installed on the local machine and has the address:
+
+http://127.0.0.1/
+
+then extract the contents to the root folder:
+
+http://127.0.0.1/jbot21/api_wex.php
+http://127.0.0.1/jbot21/jbot_wex.php
+
+
+//RU
 JBOT Автоматическая торговая система для биржи крипто-валют wex.nz
 
-
 Установка:
-
 
 Для работы кода, вам необходим сервер с настроенным php и в частности
 обязательным расширением curl_php
@@ -14,8 +30,8 @@ http://127.0.0.1/
 
 то распакуйте содержимое в корневую папку:
 
-http://127.0.0.1/jbot201/api.php
-http://127.0.0.1/jbot201/jbot_wex.php
+http://127.0.0.1/jbot21/api_wex.php
+http://127.0.0.1/jbot21/jbot_wex.php
 
 
 Описание:
