@@ -10,7 +10,7 @@
   gtag('config', 'UA-47078483-4');
 </script>
 <title>
-WEX jBOT v2.2 u.1
+WEX jBOT v2.2 u.2
 </title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="Bitcoin wex.nz j-Bot" />
@@ -45,7 +45,7 @@ var hostString = window.location.protocol+"//"+window.location.hostname+"/jbot22
 var pairs = ["btc_usd","btc_rur","btc_eur","ltc_btc","ltc_usd","ltc_rur","ltc_eur","nmc_btc","nmc_usd","nvc_btc","nvc_usd","usd_rur","eur_usd","eur_rur","ppc_btc","ppc_usd","dsh_btc","dsh_usd","dsh_rur","dsh_eur","dsh_ltc","dsh_eth","eth_btc","eth_usd","eth_eur","eth_ltc","eth_rur","bch_usd","bch_btc","bch_rur","bch_eur","bch_ltc","bch_eth","bch_dsh","zec_btc","zec_usd"];
 
 //iDebugMode. Activity
-var iD = 0; // 1 or 0
+var iD = 1; // 1 or 0
 var iNum = 0;
 
 //Counter Activity
@@ -264,6 +264,7 @@ req.open("GET", url, false);
 req.send();
 
 	if(req.status == 200) {
+	  if (req.responseText) {
 if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " &nbsp;&nbsp;&nbsp;&nbsp;<b>getOrders</b>:status = 200.<br>";}
 
 if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " &nbsp;&nbsp;&nbsp;&nbsp;<b>getOrders</b>:response = " + req.responseText+"<br>";}
@@ -301,6 +302,7 @@ if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " &nbsp;&
 			  }
 			}
 		}
+	  }
     } else {
     	document.getElementById('logs').innerHTML += "There was a problem while using XMLHTTP:\n" + req.statusText+"<br>";
     }
@@ -464,7 +466,7 @@ var overlp = 0;
 var vacans;
 var buyPriceFix = top.document.runBot.buyPrice.value-0;
 var sellPriceFix = top.document.runBot.sellPrice.value-0;
-var stepDistanceFix = +top.document.runBot.stepDistance.value-0;
+var stepDistanceFix = top.document.runBot.stepDistance.value-0;
 
 if (type == "BUY") {
   if (top.document.runBot.stepDistance.value) {
@@ -713,7 +715,7 @@ if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " <b>init
 <td width='940'>
 
 <form name='runBot' method='get' action='/'>
-<input hidden name='botIsRun' value='0'>
+	<input hidden name='botIsRun' value='0'>
 	<input hidden name='buyControl'>
 	<input hidden name='sellControl'>
 	<input hidden name='numBuyOrders'>
