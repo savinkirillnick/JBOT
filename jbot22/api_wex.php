@@ -305,13 +305,13 @@ if ($method == 'getView') {
 		$j++;
 	}
 	$j=0;
-	for ($i=41;$i<=47;$i++){
+	for ($i=41;$i<=48;$i++){
 		$low4[$j] = $low[$i];
 		$high4[$j] = $high[$i];
 		$j++;
 	}
 	$j=0;
-	for ($i=45;$i<=47;$i++){
+	for ($i=45;$i<=48;$i++){
 		$low5[$j] = $low[$i];
 		$high5[$j] = $high[$i];
 		$j++;
