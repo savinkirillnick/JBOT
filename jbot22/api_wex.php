@@ -1,5 +1,5 @@
 <?php
-$version = "v2.1";
+$version = "v2.2";
 
 if(isset($_POST['method'])) { $method = $_POST['method']; } elseif(isset($_GET['method'])) { $method = $_GET['method']; } else { $method = ''; }
 $method = htmlspecialchars(strip_tags(trim($method)));
@@ -284,6 +284,7 @@ if ($method == 'getView') {
 		$j++;
 	}
 
+	$imax = $j;
 	$i=0;
 	$j=0;
 
@@ -305,13 +306,13 @@ if ($method == 'getView') {
 		$j++;
 	}
 	$j=0;
-	for ($i=41;$i<=48;$i++){
+	for ($i=41;$i<$imax;$i++){
 		$low4[$j] = $low[$i];
 		$high4[$j] = $high[$i];
 		$j++;
 	}
 	$j=0;
-	for ($i=45;$i<=48;$i++){
+	for ($i=45;$i<$imax;$i++){
 		$low5[$j] = $low[$i];
 		$high5[$j] = $high[$i];
 		$j++;

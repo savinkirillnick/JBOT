@@ -10,7 +10,7 @@
   gtag('config', 'UA-47078483-4');
 </script>
 <title>
-WEX jBOT v2.2 u.3
+WEX jBOT v2.2 u.4
 </title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="Bitcoin wex.nz j-Bot" />
@@ -301,6 +301,8 @@ if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " &nbsp;&
 				}
 			  }
 			}
+		} else {
+			document.getElementById('orders').innerHTML = "";
 		}
 	  }
     } else {
@@ -471,7 +473,7 @@ if (type == "BUY") {
   if (top.document.runBot.stepDistance.value) {
 	var splitOrders = (top.document.runBot.arrayBuyOrders.value).split(' ');
 if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " <b>sendOrder()</b>:splitOrders length = "+splitOrders.length+"<br>";}
-	vacans = top.document.runBot.numBuyOrders.value;
+	vacans = top.document.runBot.numBuyOrders.value-0;
 	while (vacans) {
 	  overlp = 0;
 	  for (var i = 0; i < splitOrders.length; i++) {
@@ -491,11 +493,12 @@ if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " <b>send
   }
 	url = ""+hostString+"/api_wex.php?method=Trade&key="+top.document.runBot.key.value+"&secret="+top.document.runBot.secret.value+"&pair="+pairs[top.document.runBot.pair.value]+"&type=buy&amount="+top.document.runBot.buyOrder.value+"&rate="+buyPriceFix.toFixed(top.document.runBot.aroundPrice.value);
 }
+
 if (type == "SELL") {
   if (top.document.runBot.stepDistance.value) {
 	var splitOrders = (top.document.runBot.arraySellOrders.value).split(' ');
 if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " <b>sendOrder()</b>:splitOrders length = "+splitOrders.length+"<br>";}
-	vacans = top.document.runBot.numSellOrders.value;
+	vacans = top.document.runBot.numSellOrders.value-0;
 	while (vacans) {
 	  overlp = 0;
 	  for (var i = 0; i < splitOrders.length; i++) {
@@ -570,17 +573,21 @@ if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " <b>send
 }
 
 function sendBuyOrder(){
+if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " <b>sendBuyOrder()</b> called.<br>";}
 	controlBuyPrice();
 	if (top.document.runBot.buyControl.value == 1 && top.document.runBot.buyOption.value == 1 && top.document.runBot.numBuyOrders.value <= top.document.runBot.maxOrders.value) {
 	 sendOrder("BUY");
 	}
+if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " <b>sendBuyOrder()</b> finished.<br>";}
 }
 
 function sendSellOrder(){
+if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " <b>sendSellOrder()</b> called.<br>";}
 	controlSellPrice();
 	if (top.document.runBot.sellControl.value == 1 && top.document.runBot.sellOption.value == 1 && top.document.runBot.numSellOrders.value <= top.document.runBot.maxOrders.value) {
 	 sendOrder("SELL");
 	}
+if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " <b>sendSellOrder()</b> finished.<br>";}
 }
 
 /*SEND ORDER*/
@@ -629,10 +636,35 @@ if (iFoo == 4) {
 	} else {
 		if (top.document.runBot.botIsRun.value == 1) {
 			top.document.runBot.buyOrder.value = top.document.runBot.stepMount.value;
-			sendBuyOrder();
-
 			top.document.runBot.sellOrder.value = top.document.runBot.stepMount.value*(100-top.document.runBot.fee.value)/100;
-			sendSellOrder();
+
+			controlBuyPrice();
+			controlSellPrice();
+
+			top.document.runBot.buyControl.value-0;
+			top.document.runBot.sellControl.value-0;
+
+			var oper=0;
+
+			if (top.document.runBot.buyControl.value == 1) {
+			if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " <b>buyControl</b> OK.<br>";}
+				if (top.document.runBot.buyOption.value == 1) {
+				if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " <b>buyOption</b> OK.<br>";}
+					if (top.document.runBot.numBuyOrders.value <= top.document.runBot.maxOrders.value){
+					if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " <b>numBuyOrders</b> OK.<br>";}
+						sendOrder("BUY");
+						oper++;
+			}}}
+
+			if (top.document.runBot.sellControl.value == 1 && oper == 0) {
+			if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " <b>sellControl</b> OK.<br>";}
+				if (top.document.runBot.sellOption.value == 1){
+				if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " <b>sellOption</b> OK.<br>";}
+					if (top.document.runBot.numSellOrders.value <= top.document.runBot.maxOrders.value){
+					if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " <b>numSellOrders</b> OK.<br>";}
+						 sendOrder("SELL");
+			}}}
+
 		}
 	}
 }
@@ -715,13 +747,13 @@ if (iD) {document.getElementById('debug_logs').innerHTML += (iNum++) + " <b>init
 
 <form name='runBot' method='get' action='/'>
 	<input hidden name='botIsRun' value='0'>
-	<input hidden name='buyControl'>
-	<input hidden name='sellControl'>
-	<input hidden name='numBuyOrders'>
-	<input hidden name='numSellOrders'>
+	<input hidden name='buyControl' value='0'>
+	<input hidden name='sellControl' value='0'>
+	<input hidden name='numBuyOrders' value='0'>
+	<input hidden name='numSellOrders' value='0'>
 	<input hidden name='arrayBuyOrders' value='0'>
 	<input hidden name='arraySellOrders' value='0'>
-	<input hidden name='lastOrder'>
+	<input hidden name='lastOrder' >
 	<input hidden name='queueOrders'>
 
 <table cellpadding='0' cellspacing='0' border='0' width='100%'>
