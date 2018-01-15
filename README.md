@@ -41,12 +41,13 @@ USD, BTC, LTC, NVC, NMC и т.д. - количество средств на в�
 менее 0.0001, то показывать будет 0, для упрощения восприятия информации.
 
 Pair - текущая торгующая пара
-Бот позволяет торговать 35-ю валютными парами:
+Бот позволяет торговать 40 валютными парами:
 BTC/USD, BTC/RUR, BTC/EUR, LTC/BTC, LTC/USD, LTC/RUR, LTC/EUR,
 NMC/BTC, NMC/USD, NVC/BTC, NVC/USD, USD/RUR, EUR/USD, EUR/RUR,
 PPC/BTC, PPC/USD, DSH/BTC, DSH/USD, DSH/RUR, DSH/EUR, DSH/LTC,
-DSH/ETH, ETH/BTC, ETH/USD, ETH/EUR, ETH/LTC, ETH/RUR, BCH/BTC,
-BCH/RUR, BCH/EUR, BCH/LTC, BCH/ETH, BCH/DSH, ZEC/BTC, ZEC/USD.
+DSH/ETH, DSH/ZEC, ETH/BTC, ETH/USD, ETH/EUR, ETH/LTC, ETH/RUR,
+ETH/ZEC, BCH/USD, BCH/BTC, BCH/RUR, BCH/EUR, BCH/LTC, BCH/ETH,
+BCH/DSH, BCH/ZEC, ZEC/BTC, ZEC/USD, ZEC/LTC.
 
 Strategy - три вида стратегии:
 - OUTER - стратегия основанная на курсе. если курс растет , то покупает в
