@@ -19,12 +19,11 @@ http://127.0.0.1/jbot23/xhr.js
 
 USD, BTC, LTC, NVC, NMC и т.д. - количество средств на вашем счету. ≈сли средств менее 0.0001, то показывать будет 0, дл€ упрощени€ воспри€ти€ информации.
 
-Pair - текуща€ торгующа€ пара Ѕот позвол€ет торговать 35-ю валютными парами: BTC/USD, BTC/RUR, BTC/EUR, LTC/BTC, LTC/USD, LTC/RUR, LTC/EUR, NMC/BTC, NMC/USD, NVC/BTC, NVC/USD, USD/RUR, EUR/USD, EUR/RUR, PPC/BTC, PPC/USD, DSH/BTC, DSH/USD, DSH/RUR, DSH/EUR, DSH/LTC, DSH/ETH, ETH/BTC, ETH/USD, ETH/EUR, ETH/LTC, ETH/RUR, BCH/BTC, BCH/RUR, BCH/EUR, BCH/LTC, BCH/ETH, BCH/DSH, ZEC/BTC, ZEC/USD.
+Pair - текуща€ торгующа€ пара Ѕот позвол€ет торговать 40 валютными парами: BTC/USD, BTC/RUR, BTC/EUR, LTC/BTC, LTC/USD, LTC/RUR, LTC/EUR, NMC/BTC, NMC/USD, NVC/BTC, NVC/USD, USD/RUR, EUR/USD, EUR/RUR, PPC/BTC, PPC/USD, DSH/BTC, DSH/USD, DSH/RUR, DSH/EUR, DSH/LTC, DSH/ETH, DSH/ZEC, ETH/BTC, ETH/USD, ETH/EUR, ETH/LTC, ETH/RUR, ETH/ZEC, BCH/BTC, BCH/RUR, BCH/EUR, BCH/LTC, BCH/ETH, BCH/DSH, BCH/ZEC, ZEC/BTC, ZEC/USD, ZEC/LTC.
 
 Strategy - три вида стратегии:
 OUTER - стратеги€ основанна€ на курсе. если курс растет , то покупает в пределах диапазона HIGH-LOW, продает, выше диапазона, при падении наоборот.
-INNER - стратеги€ покупки и продажи внутри диапазона HIGH-LOW.
-STEPER - стратеги€ покупки и продажи ступенчато выставл€€ ордера
+INNER24(12,6,2) - стратеги€ покупки и продажи внутри диапазона HIGH-LOW за 24(12,6,2) часа.
 
 Step Amount - количество BTC/LTC покупаемое или продаваемое
 
@@ -42,9 +41,11 @@ Around - округление цены (оптимально, € думаю, до 3-4 знака дл€ LTC и до 1-2 дл€
 
 ¬ пол€х BUY и SELL бот предлагает цену покупки и продажи. ≈сли пол€ окрашиваютс€ в красный, то средств недостаточно.
 
-Set1-10 - —охраненные настройки
+Set1-20 - —охраненные настройки
 
 Allow и Disallow это разрешение бота проводить самосто€тельно операции покупки и продажи.
+
+Password - пароль дл€ сохранени€ настроек в зашифрованном виде и подписанных данным паролем. ѕри загрузке настроек достаточно ввести пароль и нажать Load Bot Settings
 
 FAQ
 
