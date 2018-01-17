@@ -11,9 +11,11 @@ http://127.0.0.1/
 
 then extract the contents to the root folder:
 
-http://127.0.0.1/jbot21/api_wex.php
-http://127.0.0.1/jbot21/jbot_wex.php
-
+http://127.0.0.1/jbot23/api_wex.php
+http://127.0.0.1/jbot23/jbot_wex.html
+http://127.0.0.1/jbot23/aex.js
+http://127.0.0.1/jbot23/cookies.html
+http://127.0.0.1/jbot23/xhr.js
 
 //RU
 JBOT Автоматическая торговая система для биржи крипто-валют wex.nz
@@ -30,8 +32,11 @@ http://127.0.0.1/
 
 то распакуйте содержимое в корневую папку:
 
-http://127.0.0.1/jbot21/api_wex.php
-http://127.0.0.1/jbot21/jbot_wex.php
+http://127.0.0.1/jbot23/api_wex.php
+http://127.0.0.1/jbot23/jbot_wex.html
+http://127.0.0.1/jbot23/aex.js
+http://127.0.0.1/jbot23/cookies.html
+http://127.0.0.1/jbot23/xhr.js
 
 
 Описание:
@@ -52,8 +57,7 @@ BCH/DSH, BCH/ZEC, ZEC/BTC, ZEC/USD, ZEC/LTC.
 Strategy - три вида стратегии:
 - OUTER - стратегия основанная на курсе. если курс растет , то покупает в
 пределах диапазона HIGH-LOW, продает, выше диапазона, при падении наоборот.
-- INNER - стратегия покупки и продажи внутри диапазона HIGH-LOW.
-- STEPER - стратегия покупки и продажи ступенчато выставляя ордера
+- INNER24(12,6,2) - стратегия покупки и продажи внутри диапазона HIGH-LOW.
 
 Step Amount - количество BTC/LTC покупаемое или продаваемое
 
@@ -86,6 +90,9 @@ Set1-10 - Сохраненные настройки
 
 Allow и Disallow это разрешение бота проводить самостоятельно операции покупки и
 продажи.
+
+Password - Пароль для сохранения настроек в зашифрованном виде и подписанным данным 
+паролем. Для загрузки настроек необходимо ввести пароль и нажать Load Bot Settings.
 
 
 FAQ
