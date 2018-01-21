@@ -10,7 +10,7 @@
   gtag('config', 'UA-47078483-4');
 </script>
 <title>
-WEX jBOT v2.3 u.2
+WEX jBOT v2.3 u.3
 </title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="Bitcoin wex.nz j-Bot" />
@@ -176,18 +176,18 @@ req.send();
 	var brokenString = JSON.parse(req.responseText);
 
     	if (brokenString.success) {
-			document.getElementById('inner_usd').innerHTML = brokenString["return"]["funds"]["usd"];
-			document.getElementById('inner_eur').innerHTML = brokenString["return"]["funds"]["eur"];
-			document.getElementById('inner_rur').innerHTML = brokenString["return"]["funds"]["rur"];
-			document.getElementById('inner_btc').innerHTML = brokenString["return"]["funds"]["btc"];
-			document.getElementById('inner_ltc').innerHTML = brokenString["return"]["funds"]["ltc"];
-			document.getElementById('inner_nmc').innerHTML = brokenString["return"]["funds"]["nmc"];
-			document.getElementById('inner_nvc').innerHTML = brokenString["return"]["funds"]["nvc"];
-			document.getElementById('inner_ppc').innerHTML = brokenString["return"]["funds"]["ppc"];
-			document.getElementById('inner_dsh').innerHTML = brokenString["return"]["funds"]["dsh"];
-			document.getElementById('inner_eth').innerHTML = brokenString["return"]["funds"]["eth"];
-			document.getElementById('inner_bch').innerHTML = brokenString["return"]["funds"]["bch"];
-			document.getElementById('inner_zec').innerHTML = brokenString["return"]["funds"]["zec"];
+			document.getElementById('inner_usd').innerHTML = (brokenString["return"]["funds"]["usd"]).toFixed(8);
+			document.getElementById('inner_eur').innerHTML = (brokenString["return"]["funds"]["eur"]).toFixed(8);
+			document.getElementById('inner_rur').innerHTML = (brokenString["return"]["funds"]["rur"]).toFixed(8);
+			document.getElementById('inner_btc').innerHTML = (brokenString["return"]["funds"]["btc"]).toFixed(8);
+			document.getElementById('inner_ltc').innerHTML = (brokenString["return"]["funds"]["ltc"]).toFixed(8);
+			document.getElementById('inner_nmc').innerHTML = (brokenString["return"]["funds"]["nmc"]).toFixed(8);
+			document.getElementById('inner_nvc').innerHTML = (brokenString["return"]["funds"]["nvc"]).toFixed(8);
+			document.getElementById('inner_ppc').innerHTML = (brokenString["return"]["funds"]["ppc"]).toFixed(8);
+			document.getElementById('inner_dsh').innerHTML = (brokenString["return"]["funds"]["dsh"]).toFixed(8);
+			document.getElementById('inner_eth').innerHTML = (brokenString["return"]["funds"]["eth"]).toFixed(8);
+			document.getElementById('inner_bch').innerHTML = (brokenString["return"]["funds"]["bch"]).toFixed(8);
+			document.getElementById('inner_zec').innerHTML = (brokenString["return"]["funds"]["zec"]).toFixed(8);
 	    }
 
 	} else {
@@ -407,7 +407,7 @@ if (type == "BUY") {
 	while (vacans) {
 	  overlp = 0;
 	  for (var i = 0; i < splitOrders.length; i++) {
-		if (splitOrders[i] == buyPriceFix.toFixed(top.document.runBot.aroundPrice.value)){
+		if ((splitOrders[i]-0).toFixed(8) == (buyPriceFix.toFixed(top.document.runBot.aroundPrice.value)-0).toFixed(8)){
 		  overlp++;
 		}
 	  }
@@ -427,7 +427,7 @@ if (type == "SELL") {
 	while (vacans) {
 	  overlp = 0;
 	  for (var i = 0; i < splitOrders.length; i++) {
-		if (splitOrders[i] == sellPriceFix.toFixed(top.document.runBot.aroundPrice.value)){
+		if ((splitOrders[i]-0).toFixed(8) == (sellPriceFix.toFixed(top.document.runBot.aroundPrice.value)-0).toFixed(8)){
 		  overlp++;
 		}
 	  }
