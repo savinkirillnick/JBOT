@@ -7,15 +7,15 @@ To run the code, you need a server with a configured php and with extension of c
 
 If your server is installed on the local machine and has the address:
 
-http://127.0.0.1
+http://127.0.0.1/
 
 then extract the contents to the root folder:
 
-/jbot23/api_wex.php
-/jbot23/jbot_wex.html
-/jbot23/aex.js
-/jbot23/cookies.html
-/jbot23/xhr.js
+jbot23/api_wex.php
+jbot23/jbot_wex.html
+jbot23/aex.js
+jbot23/cookies.html
+jbot23/xhr.js
 
 //RU
 JBOT Автоматическая торговая система для биржи крипто-валют wex.nz
@@ -28,15 +28,15 @@ JBOT Автоматическая торговая система для бир�
 Если ваш сервер установлен на локальной машине
 и имеет адрес:
 
-http://127.0.0.1
+http://127.0.0.1/
 
 то распакуйте содержимое в корневую папку:
 
-/jbot23/api_wex.php
-/jbot23/jbot_wex.html
-/jbot23/aex.js
-/jbot23/cookies.html
-/jbot23/xhr.js
+jbot23/api_wex.php
+jbot23/jbot_wex.html
+jbot23/aex.js
+jbot23/cookies.html
+jbot23/xhr.js
 
 
 Описание:
