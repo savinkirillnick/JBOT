@@ -10,7 +10,7 @@
   gtag('config', 'UA-47078483-4');
 </script>
 <title>
-WEX jBOT v2.3 u.1
+WEX jBOT v2.3 u.2
 </title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="Bitcoin wex.nz j-Bot" />
@@ -378,6 +378,7 @@ req.send();
 			document.getElementById('logs').innerHTML += "Order "+orderId+" was cancelled.<br>";
 			document.getElementById('progress_bar').innerHTML += "&#9668;";
 			top.document.runBot.queueOrders.value = "";
+			if (document.getElementById('id'+orderId) !== null) {document.getElementById('id'+orderId).style.display = "none";}
 		}
 	} else {
 		document.getElementById('logs').innerHTML += "There was a problem while using XMLHTTP:\n" + req.statusText+"<br>";
