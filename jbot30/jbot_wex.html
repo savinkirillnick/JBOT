@@ -10,7 +10,7 @@
   gtag('config', 'UA-47078483-4');
 </script>
 <title>
-WEX jBOT v3.0 u.1
+WEX jBOT v3.0 u.2
 </title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="Bitcoin wex.nz j-Bot" />
@@ -491,11 +491,11 @@ if (res == null){
 	var vacans;
 	var buyPriceFix = parseFloat(top.document.runBot.buyPrice.value).toFixed(_rules["pairs"][top.document.runBot.pair.value]["decimal_places"]);
 	var sellPriceFix = parseFloat(top.document.runBot.sellPrice.value).toFixed(_rules["pairs"][top.document.runBot.pair.value]["decimal_places"]);
-	var stepDistanceFix
+	var stepDistanceFix;
 	if (parseFloat(top.document.runBot.stepDensity.value)) {
-		stepDistanceFix = _rangePrice/top.document.runBot.stepDensity.value;
+		stepDistanceFix = parseFloat(_rangePrice/top.document.runBot.stepDensity.value).toFixed(_rules["pairs"][top.document.runBot.pair.value]["decimal_places"]);
 	} else {
-		stepDistanceFix = parseFloat(top.document.runBot.stepDistance.value);
+		stepDistanceFix = parseFloat(top.document.runBot.stepDistance.value).toFixed(_rules["pairs"][top.document.runBot.pair.value]["decimal_places"]);
 	}
 	if (type == "BUY" || type == "buy") { //IF BUY ORDERS SENT
 		controlBuyPrice();
@@ -518,7 +518,7 @@ if (res == null){
 		}
 		if (_buyControl == 1 && type == "buy" && timeControl == 1) {
 			if (buyPriceFix >= _lastPrice) {
-				buyPriceFix = _lastPrice - stepDistanceFix;
+				buyPriceFix = (parseFloat(_lastPrice) - parseFloat(stepDistanceFix)).toFixed(_rules["pairs"][top.document.runBot.pair.value]["decimal_places"]);
 			}
 			if (stepDistanceFix) {
 				vacans = _numBuyOrders;
@@ -530,7 +530,7 @@ if (res == null){
 						}
 					}
 					if (overlp > 0) {
-				    	buyPriceFix = (buyPriceFix-stepDistanceFix).toFixed(_rules["pairs"][top.document.runBot.pair.value]["decimal_places"]);
+				    	buyPriceFix = (parseFloat(buyPriceFix) - parseFloat(stepDistanceFix)).toFixed(_rules["pairs"][top.document.runBot.pair.value]["decimal_places"]);
 					}
 					vacans--;
 				}
@@ -571,7 +571,7 @@ if (res == null){
 		}
 		if (_sellControl == 1 && type == "sell" && timeControl == 1) {
 			if (sellPriceFix <= _lastPrice) {
-				sellPriceFix = _lastPrice + stepDistanceFix;
+				sellPriceFix = (parseFloat(_lastPrice) + parseFloat(stepDistanceFix)).toFixed(_rules["pairs"][top.document.runBot.pair.value]["decimal_places"]);
 			}
 			if (stepDistanceFix) {
 				vacans = _numSellOrders;
@@ -583,7 +583,7 @@ if (res == null){
 						}
 					}
 					if (overlp > 0) {
-				    	sellPriceFix = parseFloat(sellPriceFix+stepDistanceFix).toFixed(_rules["pairs"][top.document.runBot.pair.value]["decimal_places"]);
+				    	sellPriceFix = (parseFloat(sellPriceFix) + parseFloat(stepDistanceFix)).toFixed(_rules["pairs"][top.document.runBot.pair.value]["decimal_places"]);
 					}
 					vacans--;
 				}
@@ -983,7 +983,7 @@ function initBot() {
 		</div>
 	</div>
 	<div class="div_body" id="div_logs_body">
-	Loading...<br>
+	Welcome to JBOT. Be patien while JBOT is loading...<br>
 	</div>
 </div>
 <div class="div_hr"></div>
