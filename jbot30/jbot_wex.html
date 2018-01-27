@@ -1,0 +1,1019 @@
+<html>
+<head>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-47078483-4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-47078483-4');
+</script>
+<title>
+WEX jBOT v3.0 u.1
+</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="Bitcoin wex.nz j-Bot" />
+<meta property="keywords" content="" />
+<meta property="og:description" content="Bitcoin wex.nz j-Bot" />
+<meta property="og:image" content="http://funnymay.com/images/thumb3.jpg" />
+<meta property="og:title" content="WEX jBOT v3.0" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="http://funnymay.com/" />
+<link rel='stylesheet'  href='style.css' type='text/css' media='all' />
+</head>
+<script type="text/javascript" src="aes.js"></script>
+<script type="text/javascript" src="b64.js"></script>
+<script type="text/javascript" src="hmac-sha512.js"></script>
+<script type="text/javascript" src="xhr.js"></script>
+<script type="text/javascript" src="cookies.js"></script>
+<script type="text/javascript" >
+/*Global Variables*/
+
+var _host = window.location.protocol+"//"+window.location.hostname+"/jbot30"; //very Important string. For working anywhere
+var _rules; //Exchange Rules
+var _balances=[]; //Customers balances
+var _init=0; //Init Page
+var _botIsRun=0; //Run bot
+var _nonce=0; //nonce needed for queries
+var _buyControl=0;
+var _sellControl=0;
+var _numBuyOrders=0;
+var _numSellOrders=0;
+var _arrayBuyOrders=[];
+var _arraySellOrders=[];
+var _lastBuyTime=0; //Time of last orders request
+var _lastSellTime=0; //Time of last orders request
+var _lastPrice=0; // Close price of Last Candle
+var _rangePrice=0; // High-Low range for 24-hours
+var _queueOrders=0; //Queue of old orders
+var _counter = 1; //Counter of functions
+var _highSqueeze = 0;
+var _lowSqueeze = 0;
+/*Global Variables OK*/
+</script>
+<script type="text/javascript" >
+/*Logs*/
+
+function log(str) {
+//var timeData = new Date();
+var timeData = new Date;
+
+timeData = "[" + timeData.getFullYear() + "-" +
+("00" + (timeData.getMonth() + 1)).slice(-2) + "-" +
+("00" + timeData.getDate()).slice(-2) +
+"] (" +
+("00" + timeData.getHours()).slice(-2) + ":" +
+("00" + timeData.getMinutes()).slice(-2) + ":" +
+("00" + timeData.getSeconds()).slice(-2) +
+")";
+
+document.getElementById('div_logs_body').innerHTML += timeData + " " + str + "<br>";
+delete timeData;
+}
+
+/*Logs*/
+</script>
+<script type="text/javascript" >
+/*Hide Show*/
+
+function hideBox(box) {
+	document.getElementById('div_'+box+'_hide').style.display = 'none';
+	document.getElementById('div_'+box+'_show').style.display = 'block';
+	document.getElementById('div_'+box+'_body').style.display = 'none';
+}
+
+function showBox(box) {
+	document.getElementById('div_'+box+'_hide').style.display = 'block';
+	document.getElementById('div_'+box+'_show').style.display = 'none';
+	document.getElementById('div_'+box+'_body').style.display = 'block';
+}
+
+/*Hide Show*/
+</script>
+<script type="text/javascript" >
+/*Progress Bar*/
+
+function bar(col) {
+	if (col) {
+		document.getElementById('progress_bar').style.color = col;
+	} else {
+		if (document.getElementById('progress_bar').style.color == 'cyan') {
+			document.getElementById('progress_bar').style.color = 'grey';
+		} else {
+			document.getElementById('progress_bar').style.color = 'cyan';
+		}
+}}
+
+/*Progress Bar*/
+</script>
+<script type="text/javascript" >
+/*Settings*/
+
+function saveSettings () {
+deleteCookie('wex_set_'+top.document.runBot.botSet.value);
+var date = new Date;
+date.setDate( date.getDate() + 365 );
+var cookieString = '{"set": "'+top.document.runBot.botSet.value+'", "key": "'+top.document.runBot.key.value+'", "secret": "'+top.document.runBot.secret.value+'", "pair": "'+top.document.runBot.pair.value+'", "fee": "'+top.document.runBot.fee.value+'", "strategy": "'+top.document.runBot.strategy.value+'", "deltaPrice": "'+top.document.runBot.deltaPrice.value+'", "stepDensity": "'+top.document.runBot.stepDensity.value+'", "stepMount": "'+top.document.runBot.stepMount.value+'", "stepDistance": "'+top.document.runBot.stepDistance.value+'", "maxOrders": "'+top.document.runBot.maxOrders.value+'", "stepTime": "'+top.document.runBot.stepTime.value+'", "orderLife": "'+top.document.runBot.orderLife.value+'"}';
+var encryptedString = CryptoJS.AES.encrypt(cookieString, top.document.runBot.password.value);
+setCookie('wex_set_'+top.document.runBot.botSet.value, encryptedString.toString(), { expires: date.toUTCString() });
+log("Settings set: "+top.document.runBot.botSet.value+" saved.");
+delete date;
+delete settingsString;
+delete encryptedString;
+}
+
+function loadSettings () {
+var settingsString = getCookie('wex_set_'+top.document.runBot.botSet.value);
+var decryptedString = CryptoJS.AES.decrypt(settingsString, top.document.runBot.password.value);
+	if (decryptedString != ""){
+		var brokenString = JSON.parse(decryptedString.toString(CryptoJS.enc.Utf8));
+		top.document.runBot.key.value = brokenString.key;
+		top.document.runBot.secret.value = brokenString.secret;
+		top.document.runBot.pair.value = brokenString.pair;
+		top.document.runBot.strategy.selectedIndex = brokenString.strategy;
+		top.document.runBot.fee.value = brokenString.fee;
+		top.document.runBot.deltaPrice.value = brokenString.deltaPrice;
+		top.document.runBot.stepDensity.value = brokenString.stepDensity;
+		top.document.runBot.stepMount.value = brokenString.stepMount;
+		top.document.runBot.stepDistance.value = brokenString.stepDistance;
+		top.document.runBot.maxOrders.value = brokenString.maxOrders;
+		top.document.runBot.stepTime.value = brokenString.stepTime;
+		top.document.runBot.orderLife.value = brokenString.orderLife;
+		log("Settings set: "+top.document.runBot.botSet.value+" loaded.");
+	}
+delete settingsString;
+delete decryptedString;
+}
+
+/*Settings OK*/
+</script>
+<script type="text/javascript" >
+/*Encrypt Post Data*/
+
+function preparePost(arr) {
+arr["nonce"] = _nonce++;
+var post = "";
+	for (var key in arr){
+		post += key+"="+arr[key]+"&";
+	}
+	post = post.substring(0, post.length - 1);
+var sign = CryptoJS.HmacSHA512(post, top.document.runBot.secret.value);
+	sign = sign.toString(CryptoJS.enc.Hex);
+var prepare = '{"key":"'+top.document.runBot.key.value+'", "post_data": "'+post+'", "sign": "'+sign+'"}';
+return base64Encode(JSON.stringify(prepare));
+delete n;
+delete post;
+delete sign;
+delete prepare;
+}
+
+/*Encrypt Post Data*/
+</script>
+<script type="text/javascript" >
+/*REQUEST*/
+
+function getRequest(url, method, p, q) {
+
+    var req = getXMLHTTP();
+    if (!req) {
+        log("Unable to set up the XHR object.");
+        return;
+    }
+    req.open("GET", url, true);
+    req.onreadystatechange = function() {
+
+	  if(req.readyState === XMLHttpRequest.DONE && req.status === 200) {
+	  	switch (method) {
+	  		case "getPairs":
+	  			getPairs(req.responseText);
+	  		break;
+	  		case "getChart":
+	  			getChart(req.responseText);
+	  		break;
+	  		case "getBalances":
+	  			getBalances(req.responseText);
+	  		break;
+	  		case "getOrders":
+	  			getOrders(req.responseText);
+	  		break;
+	  		case "cancelOrder":
+	  			cancelOrder(0,req.responseText);
+	  		break;
+	  		case "getPrices":
+	  			getPrices(req.responseText);
+	  		break;
+	  		case "Buy":
+	  			sendOrder("BUY", req.responseText, p, q);
+	  		break;
+	  		case "Sell":
+	  			sendOrder("SELL", req.responseText, p, q);
+	  		break;
+	  	}
+	  }
+    };
+    req.send();
+}
+
+/*REQUEST*/
+</script>
+<script type="text/javascript" >
+/*Load Exchange Pairs*/
+
+function getPairs(res) {
+if (res == null) {
+	var url = _host+"/api_wex_g.php";
+	getRequest(url, "getPairs");
+	delete url;
+} else {
+	var v;
+	var brokenString = JSON.parse(res);
+	if (typeof(_rules) == 'undefined' || _rules == null) {_rules = brokenString;}
+	var inner = "<select name='pair' onChange='getChart();' style='width:70;'>";
+		for (var key in brokenString['pairs']) {
+			v = key.split('_');
+			inner += "<option value='"+key+"'>"+v[0].toUpperCase()+"/"+v[1].toUpperCase()+"</option>";
+		}
+	inner += "</select>";
+	document.getElementById('inner_pairs').innerHTML = inner;
+	_init = 1;
+	delete v;
+	delete brokenString;
+	delete inner;
+	bar();
+}	}
+
+/*Load Exchange Pairs*/
+</script>
+<script type="text/javascript" >
+/*Draw Chart*/
+
+function getChart(res) {
+if (res == null) {
+	var url = _host+"/api_wex_c.php?pair="+top.document.runBot.pair.value;
+	getRequest(url, "getChart");
+	delete url;
+} else {
+	var brokenString = JSON.parse(res);
+	document.getElementById('loaded_chart_values').innerHTML = JSON.stringify(brokenString["candles"]);
+	document.getElementById('loaded_chart_volume_values').innerHTML = JSON.stringify(brokenString["volumes"]);
+	drawChart();
+	drawChartVolume();
+	var v = top.document.runBot.pair.value.split('_');
+	document.getElementById('chart_title').innerHTML = "Chart <b>"+v[0].toUpperCase()+"</b>/<b>"+v[1].toUpperCase()+"</b>";
+	delete v;
+	delete brokenString;
+	bar();
+}}
+
+/*Draw Chart*/
+</script>
+<script type="text/javascript" >
+/*Get Balance*/
+
+function getBalances(res) {
+
+if (top.document.runBot.key.value && top.document.runBot.secret.value) {
+	if (res == null){
+		var arr = new Array ();
+			arr["method"] = "getInfo";
+		var postData = preparePost(arr);
+		delete arr;
+		var url = _host+"/api_wex_t.php?data="+postData;
+		getRequest(url, "getBalances");
+		delete url;
+	} else {
+		document.getElementById('div_balance_body').innerHTML = "";
+		var brokenString = JSON.parse(res);
+		var inner = "";
+			for (var key in brokenString['return']['funds']) {
+				inner += "<div class='div_balance_left'>"+key.toUpperCase()+"</div><div class='div_balance_right' id='inner_"+key.toUpperCase()+"'>"+brokenString['return']['funds'][key].toFixed(8)+"</div><div class='div_clear'></div>";
+				_balances[key] = parseFloat(brokenString['return']['funds'][key]);
+			}
+		document.getElementById('div_balance_body').innerHTML = inner;
+		delete brokenString;
+		delete inner;
+	    bar();
+	}
+
+}}
+
+/*Get Balance*/
+</script>
+<script type="text/javascript" >
+/*Get Active Orders*/
+
+function getOrders(res) {
+
+if (top.document.runBot.key.value && top.document.runBot.secret.value) {
+	if (res == null){
+		var arr = new Array ();
+			arr["method"] = "ActiveOrders";
+			arr["pair"] = top.document.runBot.pair.value;
+		var postData = preparePost(arr);
+		delete arr;
+		var url = _host+"/api_wex_t.php?data="+postData;
+		getRequest(url, "getOrders");
+		delete url;
+	} else {
+		document.getElementById('div_orders_body').innerHTML = "";
+		var brokenString = JSON.parse(res);
+		if (brokenString.success) {
+			var timestampLast = (new Date()).getTime() - top.document.runBot.orderLife.value*60*1000;
+			var timestampCreated;
+			var v = top.document.runBot.pair.value.split('_');
+			var deltaTime;
+			_numBuyOrders = 0;
+			_numSellOrders = 0;
+			_arrayBuyOrders = [];
+			_arraySellOrders = [];
+			var price;
+			var amount;
+			for (var key in brokenString["return"]) {
+			  timestampCreated = brokenString["return"][key]["timestamp_created"]*1000;
+			  deltaTime = timestampCreated - timestampLast;
+			  if (deltaTime < 0) {
+				_queueOrders = key;
+			  } else {
+			  	price = brokenString["return"][key]["rate"].toFixed(_rules["pairs"][top.document.runBot.pair.value]["decimal_places"]);
+				amount = brokenString["return"][key]["amount"].toFixed(_rules["pairs"][top.document.runBot.pair.value]["decimal_places"]);
+				if (brokenString["return"][key]["type"] == "buy") {
+					document.getElementById('div_orders_body').innerHTML += "<div id=\"id"+key+"\" style=\"white-space: nowrap;\"><span style=\"color: #008000; font-weight: bold;\">BUY</span> "+amount+" "+v[0].toUpperCase()+" @ "+price+" "+v[1].toUpperCase()+" <b><span onClick=\"cancelOrder("+key+")\" style=\"cursor: pointer; cursor: hand;\">×</span></b></div>";
+					_numBuyOrders++;
+					_arrayBuyOrders.push(price);
+				}
+				if (brokenString["return"][key]["type"] == "sell") {
+					document.getElementById('div_orders_body').innerHTML += "<div id=\"id"+key+"\" style=\"white-space: nowrap;\"><span style=\"color: #FF0000; font-weight: bold;\">SELL</span> "+amount+" "+v[0].toUpperCase()+" @ "+price+" "+v[1].toUpperCase()+" <b><span onClick=\"cancelOrder("+key+")\" style=\"cursor: pointer; cursor: hand;\">×</span></b></div>";
+					_numSellOrders++;
+					_arraySellOrders.push(price);
+			} } }
+			delete amount;
+			delete price;
+			delete timestampLast;
+			delete timestampCreated;
+			delete v;
+			delete deltaTime;
+		}
+		delete brokenString;
+		delete res;
+		bar();
+	}
+}}
+
+/*Get Active Orders*/
+</script>
+<script type="text/javascript" >
+/*Cancel Order*/
+
+function cancelOrder(orderId, res) {
+
+if (top.document.runBot.key.value && top.document.runBot.secret.value) {
+	if (res == null){
+		var arr = new Array ();
+			arr["method"] = "CancelOrder";
+			arr["order_id"] = orderId;
+		var postData = preparePost(arr);
+		delete arr;
+		var url = _host+"/api_wex_t.php?data="+postData;
+		getRequest(url, "cancelOrder");
+		if (document.getElementById('id'+orderId) !== null) {document.getElementById('id'+orderId).style.display = "none";}
+		delete url;
+	} else {
+		var brokenString = JSON.parse(res);
+		if (brokenString.success) {
+			log("Order was cancelled.");
+			_queueOrders = "";
+			if (document.getElementById('id'+orderId) !== null) {document.getElementById('id'+orderId).style.display = "none";}
+	    	bar("yellow");
+		}
+	delete brokenString;
+	delete res;
+	}
+}
+}
+/*Cancel Order*/
+</script>
+<script type="text/javascript" >
+/*Get Buy and Sell Positions*/
+
+function getPrices(res) {
+
+if (res == null){
+	var url = _host+"/api_wex_p.php?pair="+top.document.runBot.pair.value+"&strategy="+top.document.runBot.strategy.value;
+	getRequest(url, "getPrices");
+	delete url;
+} else {
+	var brokenString = JSON.parse(res);
+	if (brokenString.success) {
+		top.document.runBot.buyAmount.value = parseFloat(top.document.runBot.stepMount.value).toFixed(_rules["pairs"][top.document.runBot.pair.value]["decimal_places"]);
+		top.document.runBot.sellAmount.value = parseFloat(top.document.runBot.stepMount.value*(100-parseFloat(top.document.runBot.fee.value))/100).toFixed(_rules["pairs"][top.document.runBot.pair.value]["decimal_places"]);
+		_lastPrice = parseFloat(brokenString["lastprice"]);
+		_rangePrice = parseFloat(brokenString["rangeprice"]);
+		_lowSqueeze = parseFloat(brokenString["lowsqueeze"]);
+		_highSqueeze = parseFloat(brokenString["highsqueeze"]);
+		if (top.document.runBot.deltaPrice.value) {
+		  var spreadPrice = brokenString["sellprice"] - brokenString["buyprice"];
+			top.document.runBot.buyPrice.value = (brokenString["buyprice"] - top.document.runBot.deltaPrice.value*spreadPrice/100).toFixed(_rules["pairs"][top.document.runBot.pair.value]["decimal_places"]);
+			top.document.runBot.sellPrice.value = (brokenString["sellprice"] + top.document.runBot.deltaPrice.value*spreadPrice/100).toFixed(_rules["pairs"][top.document.runBot.pair.value]["decimal_places"]);
+		  delete spreadPrice;
+		} else {
+			top.document.runBot.buyPrice.value = (brokenString["buyprice"]).toFixed(_rules["pairs"][top.document.runBot.pair.value]["decimal_places"]);
+			top.document.runBot.sellPrice.value = (brokenString["sellprice"]).toFixed(_rules["pairs"][top.document.runBot.pair.value]["decimal_places"]);
+		}
+	bar();
+    }
+	delete brokenString;
+	delete res;
+	controlBuyPrice();
+	controlSellPrice();
+}
+}
+
+/*Get Buy and Sell Positions*/
+</script>
+<script type="text/javascript" >
+/*Order Control*/
+
+function controlBuyPrice() {
+
+var needed = parseFloat(top.document.runBot.buyAmount.value)*parseFloat(top.document.runBot.buyPrice.value);
+var v = top.document.runBot.pair.value.split('_');
+var amount = _balances[(v[1])];
+	if (amount < needed || _numBuyOrders >= parseInt(top.document.runBot.maxOrders.value) || top.document.runBot.buyAmount.value <= _rules["pairs"][top.document.runBot.pair.value]["min_amount"] || top.document.runBot.buyPrice.value <= _rules["pairs"][top.document.runBot.pair.value]["min_price"] || top.document.runBot.buyPrice.value >= _rules["pairs"][top.document.runBot.pair.value]["max_price"]) {
+		top.document.runBot.buyAmount.style.background = '#FBB';
+		top.document.runBot.buyPrice.style.background = '#FBB';
+		_buyControl = 0;
+		bar("pink");
+	} else {
+		top.document.runBot.buyAmount.style.background = '#333';
+		top.document.runBot.buyPrice.style.background = '#333';
+		_buyControl = 1;
+		bar("white");
+	}
+delete needed;
+delete v;
+delete innerValue;
+delete amount;
+}
+
+function controlSellPrice() {
+
+var needed = parseFloat(top.document.runBot.sellAmount.value);
+var v = top.document.runBot.pair.value.split('_');
+var amount = _balances[(v[0])];
+	if (amount < needed || _numSellOrders >= parseInt(top.document.runBot.maxOrders.value) || top.document.runBot.sellAmount.value <= _rules["pairs"][top.document.runBot.pair.value]["min_amount"] || top.document.runBot.sellPrice.value <= _rules["pairs"][top.document.runBot.pair.value]["min_price"] || top.document.runBot.sellPrice.value >= _rules["pairs"][top.document.runBot.pair.value]["max_price"]) {
+		top.document.runBot.sellAmount.style.background = '#FBB';
+		top.document.runBot.sellPrice.style.background = '#FBB';
+		_sellControl = 0;
+		bar("pink");
+	} else {
+		top.document.runBot.sellAmount.style.background = '#333';
+		top.document.runBot.sellPrice.style.background = '#333';
+		_sellControl = 1;
+		bar("white");
+	}
+delete needed;
+delete v;
+delete innerValue;
+delete amount;
+}
+
+/*Order Control OK*/
+</script>
+<script type="text/javascript" >
+/*SEND ORDER*/
+
+function sendOrder(type, res, p, q) {
+if (top.document.runBot.key.value && top.document.runBot.secret.value) {
+if (res == null){
+	var url;
+	var overlp = 0;
+	var vacans;
+	var buyPriceFix = parseFloat(top.document.runBot.buyPrice.value).toFixed(_rules["pairs"][top.document.runBot.pair.value]["decimal_places"]);
+	var sellPriceFix = parseFloat(top.document.runBot.sellPrice.value).toFixed(_rules["pairs"][top.document.runBot.pair.value]["decimal_places"]);
+	var stepDistanceFix
+	if (parseFloat(top.document.runBot.stepDensity.value)) {
+		stepDistanceFix = _rangePrice/top.document.runBot.stepDensity.value;
+	} else {
+		stepDistanceFix = parseFloat(top.document.runBot.stepDistance.value);
+	}
+	if (type == "BUY" || type == "buy") { //IF BUY ORDERS SENT
+		controlBuyPrice();
+		var timeControl = _lastBuyTime + parseInt(top.document.runBot.stepTime.value);
+		if (parseInt(new Date().getTime()/1000) > timeControl) {
+			timeControl = 1;
+		}
+		if (_buyControl == 1 && type == "BUY") {
+			var arr = new Array ();
+				arr["method"] = "Trade";
+				arr["pair"] = top.document.runBot.pair.value;
+				arr["type"] = "buy";
+				arr["rate"] = buyPriceFix;
+				arr["amount"] = parseFloat(top.document.runBot.buyAmount.value).toFixed(_rules["pairs"][top.document.runBot.pair.value]["decimal_places"]);
+			var postData = preparePost(arr);
+			delete arr;
+			var url = _host+"/api_wex_t.php?data="+postData;
+			getRequest(url, "Buy", buyPriceFix, parseFloat(top.document.runBot.buyAmount.value).toFixed(_rules["pairs"][top.document.runBot.pair.value]["decimal_places"]));
+			delete url;
+		}
+		if (_buyControl == 1 && type == "buy" && timeControl == 1) {
+			if (buyPriceFix >= _lastPrice) {
+				buyPriceFix = _lastPrice - stepDistanceFix;
+			}
+			if (stepDistanceFix) {
+				vacans = _numBuyOrders;
+				while (vacans) {
+					overlp = 0;
+					for (var i = 0; i < _arrayBuyOrders.length; i++) {
+						if (_arrayBuyOrders[i] == buyPriceFix){
+					  	overlp++;
+						}
+					}
+					if (overlp > 0) {
+				    	buyPriceFix = (buyPriceFix-stepDistanceFix).toFixed(_rules["pairs"][top.document.runBot.pair.value]["decimal_places"]);
+					}
+					vacans--;
+				}
+			}
+
+			var arr = new Array ();
+				arr["method"] = "Trade";
+				arr["pair"] = top.document.runBot.pair.value;
+				arr["type"] = "buy";
+				arr["rate"] = buyPriceFix;
+				arr["amount"] = parseFloat(top.document.runBot.buyAmount.value).toFixed(_rules["pairs"][top.document.runBot.pair.value]["decimal_places"]);
+			var postData = preparePost(arr);
+			delete arr;
+			var url = _host+"/api_wex_t.php?data="+postData;
+			getRequest(url, "Buy", buyPriceFix, parseFloat(top.document.runBot.buyAmount.value).toFixed(_rules["pairs"][top.document.runBot.pair.value]["decimal_places"]));
+			delete url;
+		}
+		delete timeControl;
+	}//IF BUY ORDERS SENT
+	if (type == "SELL" || type == "sell") { //IF SELL ORDERS SENT
+		controlSellPrice();
+		var timeControl = _lastSellTime + parseInt(top.document.runBot.stepTime.value);
+		if (parseInt(new Date().getTime()/1000) > timeControl) {
+			timeControl = 1;
+		}
+		if (_sellControl == 1 && type == "SELL") {
+			var arr = new Array ();
+				arr["method"] = "Trade";
+				arr["pair"] = top.document.runBot.pair.value;
+				arr["type"] = "sell";
+				arr["rate"] = sellPriceFix;
+				arr["amount"] = parseFloat(top.document.runBot.sellAmount.value).toFixed(_rules["pairs"][top.document.runBot.pair.value]["decimal_places"]);
+			var postData = preparePost(arr);
+			delete arr;
+			var url = _host+"/api_wex_t.php?data="+postData;
+			getRequest(url, "Sell", sellPriceFix, parseFloat(top.document.runBot.sellAmount.value).toFixed(_rules["pairs"][top.document.runBot.pair.value]["decimal_places"]));
+			delete url;
+		}
+		if (_sellControl == 1 && type == "sell" && timeControl == 1) {
+			if (sellPriceFix <= _lastPrice) {
+				sellPriceFix = _lastPrice + stepDistanceFix;
+			}
+			if (stepDistanceFix) {
+				vacans = _numSellOrders;
+				while (vacans) {
+					overlp = 0;
+					for (var i = 0; i < _arraySellOrders.length; i++) {
+						if (_arraySellOrders[i] == sellPriceFix){
+					  	overlp++;
+						}
+					}
+					if (overlp > 0) {
+				    	sellPriceFix = parseFloat(sellPriceFix+stepDistanceFix).toFixed(_rules["pairs"][top.document.runBot.pair.value]["decimal_places"]);
+					}
+					vacans--;
+				}
+			}
+
+			var arr = new Array ();
+				arr["method"] = "Trade";
+				arr["pair"] = top.document.runBot.pair.value;
+				arr["type"] = "sell";
+				arr["rate"] = sellPriceFix;
+				arr["amount"] = parseFloat(top.document.runBot.sellAmount.value).toFixed(_rules["pairs"][top.document.runBot.pair.value]["decimal_places"]);
+			var postData = preparePost(arr);
+			delete arr;
+			var url = _host+"/api_wex_t.php?data="+postData;
+			getRequest(url, "Sell", sellPriceFix, parseFloat(top.document.runBot.sellAmount.value).toFixed(_rules["pairs"][top.document.runBot.pair.value]["decimal_places"]));
+			delete url;
+		}
+		delete timeControl;
+	}//IF SELL ORDERS SENT
+	delete url;
+	delete overlp;
+	delete vacans;
+	delete buyPriceFix;
+	delete sellPriceFix;
+	delete stepDistanceFix;
+
+} else {
+
+	var brokenString = JSON.parse(res);
+	if (brokenString.success) {
+		var v = (top.document.runBot.pair.value).split('_');
+		if (type == "BUY" || type == "buy") {
+			document.getElementById('div_orders_body').innerHTML += "<div id=\"id"+brokenString["return"]["order_id"]+"\" style=\"white-space: nowrap;\"><span style=\"color: #008000; font-weight: bold;\">BUY</span> "+q+" "+v[0].toUpperCase()+" @ "+p+" "+v[1].toUpperCase()+" <b><span onClick=\"cancelOrder("+brokenString["return"]["order_id"]+")\" style=\"cursor: pointer; cursor: hand;\">×</span></b></div>";
+			_numBuyOrders++;
+			_lastBuyTime = parseInt(new Date().getTime()/1000);
+			log("<span style=\"color: #008000; font-weight: bold;\">BUY</span> "+q+" "+v[0].toUpperCase()+" @ "+p+" "+v[1].toUpperCase());
+			delete price;
+			delete amount;
+			bar("lime");
+			if (_numBuyOrders >= top.document.runBot.maxOrders.value) {
+				top.document.runBot.buyAmount.style.background = '#FBB';
+				top.document.runBot.buyPrice.style.background = '#FBB';
+				_buyControl = 0;
+			}
+		}
+		if (type == "SELL" || type == "sell") {
+			document.getElementById('div_orders_body').innerHTML += "<div id=\"id"+brokenString["return"]["order_id"]+"\" style=\"white-space: nowrap;\"><span style=\"color: #ff0000; font-weight: bold;\">SELL</span> "+q+" "+v[0].toUpperCase()+" @ "+p+" "+v[1].toUpperCase()+" <b><span onClick=\"cancelOrder("+brokenString["return"]["order_id"]+")\" style=\"cursor: pointer; cursor: hand;\">×</span></b></div>";
+			_numSellOrders++;
+			_lastSellTime = parseInt(new Date().getTime()/1000);
+			log("<span style=\"color: #ff0000; font-weight: bold;\">SELL</span> "+q+" "+v[0].toUpperCase()+" @ "+p+" "+v[1].toUpperCase());
+			delete price;
+			delete amount;
+			bar("red");
+			if (_numSellOrders >= top.document.runBot.maxOrders.value) {
+				top.document.runBot.sellAmount.style.background = '#FBB';
+				top.document.runBot.sellPrice.style.background = '#FBB';
+				_sellControl = 0;
+			}
+		}
+		delete v;
+		delete brokenString;
+	}
+}}
+}
+
+/*SEND ORDER*/
+</script>
+<script type="text/javascript" >
+/*Init Page*/
+
+function initPage() {
+	//origin Nonce.
+	_nonce = parseInt(new Date().getTime()/1000);
+
+	//call functions every 2 seconds.
+	var msec = 2000;
+	setInterval(refreshData, msec);
+	log("JBOT is ready.");
+}
+
+/*Init Page*/
+</script>
+<script type="text/javascript" >
+/*Refresh Data*/
+
+function refreshData () {
+
+	if (_counter == 1 && _init == 0) {
+	//Load Exchange Pairs
+	getPairs();
+	}
+	if (_counter == 1 && _init == 1) {
+	//Load Account Balances
+	getBalances();
+	}
+	if (_counter == 2) {
+	//Draw Chart
+	getChart();
+	}
+	if (_counter == 3) {
+	//Load Active Orders
+	getOrders();
+	}
+	if (_counter == 4) {
+	//Load Active Orders
+	getPrices();
+	}
+
+	if (_counter == 5) {
+		if (_queueOrders){
+			cancelOrder(_queueOrders);
+		} else {
+			if (_botIsRun == 1) {
+				controlBuyPrice();
+				controlSellPrice();
+				var oper=0;
+				if (_buyControl == 1) {
+					if (top.document.runBot.buyOption.value == 1) {
+						if (_numBuyOrders <= top.document.runBot.maxOrders.value){
+							sendOrder("buy");
+							oper++;
+				}}}
+
+				if (_sellControl == 1 && oper == 0) {
+					if (top.document.runBot.sellOption.value == 1){
+						if (_numSellOrders <= top.document.runBot.maxOrders.value){
+							 sendOrder("sell");
+				}}}
+				delete oper;
+			}
+		}
+	}
+	_counter++;
+	if (_counter > 5){_counter = 1;}
+}
+
+/*Refresh Data*/
+</script>
+<script type="text/javascript" >
+/*Run Bot*/
+
+function initBot() {
+
+	if (_botIsRun != 1){
+		_botIsRun = 1;
+		top.document.runBot.runBotButton.value = 'Stop Bot';
+		log("JBOT started.");
+		bar("white");
+	} else {
+		_botIsRun = 0;
+		top.document.runBot.runBotButton.value = 'Run Bot';
+		log("JBOT stopped.");
+		top.document.runBot.buyAmount.style.background = '#333';
+		top.document.runBot.buyPrice.style.background = '#333';
+		top.document.runBot.sellAmount.style.background = '#333';
+		top.document.runBot.sellPrice.style.background = '#333';
+		bar("pink");
+	}
+
+}
+
+/*Run Bot*/
+</script>
+<body onLoad="initPage()">
+<table cellpadding='0' cellspacing='0' border='0' width='100%'>
+<tr>
+<td width=*>
+</td>
+<td width='1250'>
+<form name='runBot' method='get' action='/'>
+<center>
+<table cellpadding='0' cellspacing='5' border='0' width='1250'>
+<tr>
+<td width='200' valign='top'>
+<div class="div_outer">
+	<div class="div_header">
+		<div class="div_title">
+			Settings
+		</div>
+		<div class="div_button" id="div_settings_hide" onClick="hideBox('settings')" style="cursor: pointer; cursor: hand;">
+			&#9650;
+		</div>
+		<div class="div_button" id="div_settings_show" onClick="showBox('settings')" style="cursor: pointer; cursor: hand; display: none;">
+			&#9660;
+		</div>
+	</div>
+	<div class="div_body" id="div_settings_body">
+		<div class="div_body_left">API-key:</div><div class="div_body_right"><input type='text' name='key' placeholder='API-key' style="width: 70;"></div><div class="div_clear"></div>
+		<div class="div_body_left">API-secret:</div><div class="div_body_right"><input type='text' name='secret' placeholder='API-secret' style="width: 70;"></div><div class="div_clear"></div>
+		<div class="div_body_left">Pair:</div><div class="div_body_right" id="inner_pairs"><input type='text' placeholder='Loading...' value='' style="width: 70;"></div><div class="div_clear"></div>
+		<div class="div_body_left">Strategy:</div><div class="div_body_right"><select id='strategy' name='strategy' style="width: 70;">
+		  <option value='0'>INNER24</option>
+		  <option value='1'>INNER12</option>
+		  <option value='2'>INNER6</option>
+		  <option value='3'>INNER2</option>
+		  <option value='4'>OUTER</option>
+		</select></div><div class="div_clear"></div>
+		<div class="div_body_left">Fee, %:</div><div class="div_body_right"><input type='text' name='fee' placeholder='4' value='0.2' style="width: 70;"></div><div class="div_clear"></div>
+		<div class="div_body_left">Max Orders:</div><div class="div_body_right" id="inner_pair"><input type='text' name='maxOrders' placeholder='4' value='4' style="width: 70;"></div><div class="div_clear"></div>
+		<div class="div_body_left">Step Amount:</div><div class="div_body_right"><input type='text' name='stepMount' placeholder='0.001' value='0.001' style="width: 70;"></div><div class="div_clear"></div>
+		<div class="div_body_left">Step Density:</div><div class="div_body_right"><input type='text' name='stepDensity' placeholder='4' value='4' style="width: 70;"></div><div class="div_clear"></div>
+		<div class="div_body_left">Delta:</div><div class="div_body_right"><input type='text' name='deltaPrice' placeholder='-10' value='-10' style="width: 70;"></div><div class="div_clear"></div>
+		<div class="div_body_left">Step Distance:</div><div class="div_body_right"><input type='text' name='stepDistance' placeholder='0.001' value='0.001' style="width: 70;"></div><div class="div_clear"></div>
+		<div class="div_body_left">Step Time, sec:</div><div class="div_body_right"><input type='text' name='stepTime' placeholder='60' value='60' style="width: 70;"></div><div class="div_clear"></div>
+		<div class="div_body_left">Order Life, min:</div><div class="div_body_right"><input type='text' name='orderLife' placeholder='180' value='180' style="width: 70;"></div><div class="div_clear"></div>
+		<div class="div_body_left">Bot Settings:</div><div class="div_body_right"><select name='botSet' onChange='loadSettings();' style="width: 70;">
+		  <option value='1'>Set: 1</option>
+		  <option value='2'>Set: 2</option>
+		  <option value='3'>Set: 3</option>
+		  <option value='4'>Set: 4</option>
+		  <option value='5'>Set: 5</option>
+		  <option value='6'>Set: 6</option>
+		  <option value='7'>Set: 7</option>
+		  <option value='8'>Set: 8</option>
+		  <option value='9'>Set: 9</option>
+		  <option value='10'>Set: 10</option>
+		  <option value='11'>Set: 11</option>
+		  <option value='12'>Set: 12</option>
+		  <option value='13'>Set: 13</option>
+		  <option value='14'>Set: 14</option>
+		  <option value='15'>Set: 15</option>
+		  <option value='16'>Set: 16</option>
+		  <option value='17'>Set: 17</option>
+		  <option value='18'>Set: 18</option>
+		  <option value='19'>Set: 19</option>
+		  <option value='20'>Set: 20</option>
+		</select></div><div class="div_clear"></div>
+		<div class="div_body_left">Password:</div><div class="div_body_right"><input type='password' name='password' placeholder='Password' style="width: 70;"></div><div class="div_clear"></div>
+		<div class="div_hr"></div>
+		<input type='button' name='saveBotButton' value='Save Bot Settings' onClick='saveSettings();' style="width: 190;">
+		<div class="div_hr"></div>
+		<input type='button' name='loadBotButton' value='Load Bot Settings' onClick='loadSettings();' style="width: 190;">
+		<div class="div_hr"></div>
+		<input type='button' name='runBotButton' value='Run Bot' onClick='initBot();' style="width: 190;">
+	</div>
+</div>
+<div class="div_hr"></div>
+<div class="div_outer">
+	<div class="div_header">
+		<div class="div_title">
+			Balance
+		</div>
+		<div class="div_button" id="div_balance_hide" onClick="hideBox('balance')" style="cursor: pointer; cursor: hand;">
+			&#9650;
+		</div>
+		<div class="div_button" id="div_balance_show" onClick="showBox('balance')" style="cursor: pointer; cursor: hand; display: none;">
+			&#9660;
+		</div>
+	</div>
+	<div class="div_body" id="div_balance_body"></div>
+</div>
+<div class="div_hr"></div>
+
+</td>
+<td width='700' valign='top'>
+<div class="div_outer">
+	<div class="div_header">
+		<div class="div_title" id="chart_title">
+			Chart
+		</div>
+		<div class="div_button" id="progress_bar">
+			&nbsp;&#9632;&nbsp;
+		</div>
+	</div>
+	<div class="div_chart_body" id="div_chart_body">
+
+		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+		    <script type="text/javascript">
+		      google.charts.load('current', {'packages':['corechart']});
+		      google.charts.setOnLoadCallback(drawChart);
+			  google.charts.setOnLoadCallback(drawChartVolume);
+
+		  function drawChart() {
+		    if (document.getElementById('loaded_chart_values').innerHTML != ""){
+		    var data = google.visualization.arrayToDataTable(JSON.parse(document.getElementById('loaded_chart_values').innerHTML), true);
+
+		    var options = {
+		      chartArea:{
+				    left: 50,
+				    top: 10,
+				    width: 630,
+				    height: 230
+				  },
+		      legend:'none',
+		      colors: ['#444444', '#444444'],
+		      backgroundColor: {fill: '#111111', stroke: '#222222' },
+		      candlestick: {
+		            fallingColor: { strokeWidth: 0, fill: '#008000' },
+		            risingColor: { strokeWidth: 0, fill: '#ff0000' }
+		          },
+		      hAxis: {
+			        textStyle: {color: '#444444', fontSize: 12},
+			        slantedTextAngle: 90
+			      },
+			  vAxis: {
+			        gridlines: {color: '#222222'},
+			        textStyle: {color: '#444444', fontSize: 12}
+			      },
+			  series: {0: {type: 'candlesticks'}, 1: {type: 'bars', targetAxisIndex:1, color:'#ebebeb'}}
+
+		    };
+
+		    var chart = new google.visualization.CandlestickChart(document.getElementById('chart_div'));
+
+		    chart.draw(data, options);
+		    }
+		  }
+
+		  function drawChartVolume() {
+		    if (document.getElementById('loaded_chart_volume_values').innerHTML != ""){
+		    var data = google.visualization.arrayToDataTable(JSON.parse(document.getElementById('loaded_chart_volume_values').innerHTML), true);
+
+		    var options = {
+		      chartArea:{
+				    left: 50,
+				    top: 10,
+				    width: 630,
+				    height: 130
+				  },
+			  hAxis: {
+			        textStyle: {color: '#444444', fontSize: 12},
+			        slantedTextAngle: 90
+			      },
+			  vAxis: {
+			        gridlines: {color: '#222222'},
+			        textStyle: {color: '#444444', fontSize: 12}
+
+			      },
+		      legend:'none',
+		      colors: ['#444444', '#444444'],
+		      backgroundColor: {fill: '#111111', stroke: '#222222' }
+
+		    };
+		      var chart = new google.visualization.ColumnChart(document.getElementById('chart_div_volume'));
+
+		      chart.draw(data, options);
+			}
+		  }
+		</script>
+
+		<div id="loaded_chart_values" style="display: none;"></div>
+		<div id="loaded_chart_volume_values" style="display: none;"></div>
+		<div id="chart_div" style="width: 700px; height: 300px;"></div>
+		<div id="chart_div_volume" style="width: 700px; height: 195px;"></div>
+
+
+	</div>
+</div>
+<div class="div_hr"></div>
+<div class="div_outer">
+	<div class="div_header">
+		<div class="div_title">
+			Trade window
+		</div>
+		<div class="div_button" id="div_trade_hide" onClick="hideBox('trade')" style="cursor: pointer; cursor: hand;">
+			&#9650;
+		</div>
+		<div class="div_button" id="div_trade_show" onClick="showBox('trade')" style="cursor: pointer; cursor: hand; display: none;">
+			&#9660;
+		</div>
+	</div>
+	<div class="div_body" id="div_trade_body">
+		<div class="div_trade_body_left">
+			<div class="div_body_left">Buy Amount</div><div class="div_body_right"><input type='text' name='buyAmount' placeholder='min 0.001' onChange='controlBuyPrice()' style="width: 100;"></div><div class="div_clear"></div>
+			<div class="div_body_left">Buy Price</div><div class="div_body_right"><input type='text' name='buyPrice' placeholder='price' onChange='controlBuyPrice()' style="width: 100;"></div><div class="div_clear"></div>
+			<div class="div_body_left">Buy Allow</div><div class="div_body_right">
+				<select name='buyOption' onChange='controlBuyPrice()' style="width: 100;">
+				  <option value='0' selected>Disallow</option>
+				  <option value='1'>Allow</option>
+				</select></div><div class="div_clear"></div>
+			<input type='button' name='buyButton' value='BUY' onClick='sendOrder("BUY");' style='width: 95px; height: 30px; background: #008000; color: #000; font-weight: bold;'>
+		</div>
+		<div class="div_trade_body_right">
+			<div class="div_body_left">Sell Amount</div><div class="div_body_right"><input type='text' name='sellAmount' placeholder='min 0.001' onChange='controlSellPrice()' style="width: 100;"></div><div class="div_clear"></div>
+			<div class="div_body_left">Sell Price</div><div class="div_body_right"><input type='text' name='sellPrice' placeholder='price' onChange='controlSellPrice()' style="width: 100;"></div><div class="div_clear"></div>
+			<div class="div_body_left">Sell Allow</div><div class="div_body_right">
+				<select name='sellOption' onChange='controlSellPrice()' style="width: 100;">
+				  <option value='0' selected>Disallow</option>
+				  <option value='1'>Allow</option>
+				</select></div><div class="div_clear"></div>
+			<input type='button' name='sellButton' value='SELL' onClick='sendOrder("SELL");' style='width: 95px; height: 30px; background: #ff0000; color: #000; font-weight: bold;'>
+		</div>
+		<div class="div_clear">
+	</div>
+</div>
+<div class="div_hr"></div>
+<div class="div_outer">
+	<div class="div_header">
+		<div class="div_title">
+			Logs
+		</div>
+		<div class="div_button" id="div_logs_hide" onClick="hideBox('logs')" style="cursor: pointer; cursor: hand;">
+			&#9650;
+		</div>
+		<div class="div_button" id="div_logs_show" onClick="showBox('logs')" style="cursor: pointer; cursor: hand; display: none;">
+			&#9660;
+		</div>
+	</div>
+	<div class="div_body" id="div_logs_body">
+	Loading...<br>
+	</div>
+</div>
+<div class="div_hr"></div>
+</td>
+<td width=* valign='top'>
+<div class="div_outer">
+	<div class="div_header">
+		<div class="div_title">
+			Orders
+		</div>
+		<div class="div_button" id="div_orders_hide" onClick="hideBox('orders')" style="cursor: pointer; cursor: hand;">
+			&#9650;
+		</div>
+		<div class="div_button" id="div_orders_show" onClick="showBox('orders')" style="cursor: pointer; cursor: hand; display: none;">
+			&#9660;
+		</div>
+	</div>
+	<div class="div_orders_body" id="div_orders_body">
+	Loading...
+	</div>
+</div>
+<div class="div_hr"></div>
+</td>
+</tr>
+</table>
+</form>
+</td>
+<td width=*>
+</td>
+</tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,139 @@
+  body {
+    font-size: 12px;
+    font-family: Arial, sans-serif;
+    background-color: #111;
+    color: #999;
+  }
+  input, select {
+    background-color: #222;
+    border: 1px solid #333;
+    color: #999;
+  }
+  b {
+    color: #dd9;
+  }
+  .div_outer {
+    width: inherit;
+    overflow-x: visible;
+    position: relative;
+  }
+  .div_header {
+    width: 100%;
+    position: relative;
+    background-color: #333;
+    color: #999;
+    padding: 5px;
+    height: 20px;
+  }
+  .div_title {
+    font-size: 12px;
+	float: left;
+  }
+  .div_button {
+    font-size: 15px;
+	float: right;
+  }
+  .div_body {
+    font-size: 12px;
+    width: 100%;
+    position: relative;
+    padding: 5px;
+    max-height: 180px;
+    overflow-x: hidden;
+	overflow-y: auto;
+  }
+  .div_chart_body {
+    width: 100%;
+    position: relative;
+    padding: 5px;
+    height: 500px;
+    overflow-x: hidden;
+	overflow-y: hidden;
+  }
+  .div_orders_body {
+    font-size: 12px;
+    width: 100%;
+    position: relative;
+    padding: 5px;
+    max-height: 600px;
+    overflow-x: hidden;
+	overflow-y: auto;
+  }
+  .div_trade_body {
+    font-size: 12px;
+    width: inherit;
+    position: relative;
+    max-height: 200px;
+    overflow-x: hidden;
+	overflow-y: hidden;
+  }
+  .div_trade_body_left {
+    font-size: 12px;
+    width: 50%;
+    position: relative;
+	float: left;
+  }
+  .div_trade_body_right {
+    font-size: 12px;
+    width: 50%;
+    position: relative;
+	float: right;
+  }
+  .div_body_left {
+    font-size: 12px;
+    width: 60%;
+    margin-bottom:2px;
+	float: left;
+  }
+  .div_body_right {
+    font-size: 12px;
+    width: 40%;
+    margin-bottom:2px;
+	float: right;
+  }
+  .div_balance_left {
+    font-size: 12px;
+    width: 40%;
+    margin-bottom:2px;
+	float: left;
+  }
+  .div_balance_right {
+  	text-align: right;
+    font-size: 12px;
+    width: 60%;
+    margin-bottom:2px;
+	float: right;
+  }
+  .div_hr {
+    width: inherit;
+    padding: 5px;
+    height: 0px;
+  }
+  .div_clear {
+    clear: both;
+  }
+
+  ::-webkit-scrollbar{
+    width:5px;
+  }
+
+  ::-webkit-scrollbar-thumb{
+    border-width:1px 1px 1px 2px;
+    border-color: #333;
+    background-color: #222;
+  }
+
+  ::-webkit-scrollbar-thumb:hover{
+    border-width: 1px 1px 1px 2px;
+    border-color: #444;
+    background-color: #444;
+  }
+
+  ::-webkit-scrollbar-track{
+    border-width:0;
+  }
+
+  ::-webkit-scrollbar-track:hover{
+    border-left: solid 1px #333;
+    background-color: #222;
+  }
