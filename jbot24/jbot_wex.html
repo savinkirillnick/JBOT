@@ -10,7 +10,7 @@
   gtag('config', 'UA-47078483-4');
 </script>
 <title>
-WEX jBOT v2.4 u.1
+WEX jBOT v2.4 u.2
 </title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="Bitcoin wex.nz j-Bot" />
@@ -328,7 +328,7 @@ req.open("GET", url, false);
 req.send();
 
 	if(req.status == 200) {
-
+		var v = (pairs[top.document.runBot.pair.value]).split('_');
 		var brokenString = JSON.parse(req.responseText);
     	if (brokenString.success) {
     		var around = rules["pairs"][(pairs[top.document.runBot.pair.value])]["decimal_places"];
@@ -343,6 +343,7 @@ req.send();
 				top.document.runBot.sellPrice.value = parseFloat(brokenString["sellprice"]).toFixed(around);
 			}
 			top.document.runBot.lastPrice.value = parseFloat(brokenString["lastprice"]).toFixed(around);
+			document.getElementById('last_price').innerHTML = top.document.runBot.lastPrice.value + " " + v[1].toUpperCase();
 			top.document.runBot.rangePrice.value = parseFloat(brokenString["rangeprice"]).toFixed(around);
 			top.document.runBot.lowSqueeze.value = parseFloat(brokenString["lowsqueeze"]).toFixed(around);
 			top.document.runBot.highSqueeze.value = parseFloat(brokenString["highsqueeze"]).toFixed(around);
@@ -933,7 +934,11 @@ function initBot() {
 
 </td>
 <td width=* valign='top'>
-
+	<table cellpadding='10' cellspacing='10' border='0' width='100%'>
+	<tr><td align='right' width='50%'>Last Price&nbsp;
+	</td><td width='50%'><div id='last_price'>Loading...</div>
+	</td></tr>
+	</table>
 	<table cellpadding='10' cellspacing='10' border='0' width='100%'>
 	<tr><td>BUY<br>
 	<input type='text' name='buyOrder' placeholder='min 0.001' size='5' onChange='controlBuyPrice()'><br>
