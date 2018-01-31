@@ -10,7 +10,7 @@
   gtag('config', 'UA-47078483-4');
 </script>
 <title>
-WEX jBOT v2.4 u.2
+WEX jBOT v2.4 u.3
 </title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="Bitcoin wex.nz j-Bot" />
@@ -449,7 +449,7 @@ var overlp = 0;
 var vacans;
 var buyPriceFix = parseFloat(top.document.runBot.buyPrice.value);
 var sellPriceFix = parseFloat(top.document.runBot.sellPrice.value);
-if (top.document.runBot.stepDensity.value) {
+if (top.document.runBot.stepDensity.value != 0) {
 	var stepDistanceFix = parseFloat(top.document.runBot.rangePrice.value/top.document.runBot.stepDensity.value);
 } else {
 	var stepDistanceFix = parseFloat(top.document.runBot.stepDistance.value);
@@ -457,7 +457,7 @@ if (top.document.runBot.stepDensity.value) {
 var around = rules["pairs"][(pairs[top.document.runBot.pair.value])]["decimal_places"];
 
 if (type == "BUY") {
-  if (top.document.runBot.stepDistance.value) {
+  if (top.document.runBot.stepDistance.value != 0) {
 	var splitOrders = (top.document.runBot.arrayBuyOrders.value).split(' ');
 	vacans = parseInt(top.document.runBot.numBuyOrders.value);
 	while (vacans) {
@@ -477,7 +477,7 @@ if (type == "BUY") {
 }
 
 if (type == "SELL") {
-  if (top.document.runBot.stepDistance.value) {
+  if (top.document.runBot.stepDistance.value != 0) {
 	var splitOrders = (top.document.runBot.arraySellOrders.value).split(' ');
 	vacans = parseInt(top.document.runBot.numSellOrders.value);
 	while (vacans) {
