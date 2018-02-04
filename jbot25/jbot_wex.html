@@ -10,7 +10,7 @@
   gtag('config', 'UA-47078483-4');
 </script>
 <title>
-WEX jBOT v2.5 u.2
+WEX jBOT v2.5 u.3
 </title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="Bitcoin wex.nz j-Bot" />
@@ -330,7 +330,13 @@ req.send();
 	var brokenString = JSON.parse(req.responseText);
 
     	if (brokenString.success) {
-
+			for (var key in brokenString["return"]["funds"]) {
+				if (document.getElementById('inner_'+key)!== null) {
+					_g["balances"][key] = (brokenString["return"]["funds"][key]).toFixed(8);
+					document.getElementById('inner_'+key).innerHTML = (brokenString["return"]["funds"][key]).toFixed(8);
+				}
+			}
+			/*
     		_g["balances"]["usd"] = (brokenString["return"]["funds"]["usd"]).toFixed(8);
 			_g["balances"]["eur"] = (brokenString["return"]["funds"]["eur"]).toFixed(8);
 			_g["balances"]["rur"] = (brokenString["return"]["funds"]["rur"]).toFixed(8);
@@ -356,7 +362,7 @@ req.send();
 			document.getElementById('inner_eth').innerHTML = (brokenString["return"]["funds"]["eth"]).toFixed(8);
 			document.getElementById('inner_bch').innerHTML = (brokenString["return"]["funds"]["bch"]).toFixed(8);
 			document.getElementById('inner_zec').innerHTML = (brokenString["return"]["funds"]["zec"]).toFixed(8);
-
+			*/
 			document.getElementById('v_a').innerHTML = v[0].toUpperCase() + ": " + (brokenString["return"]["funds"][(v[0])]).toFixed(8);
 			document.getElementById('v_b').innerHTML = v[1].toUpperCase() + ": " + (brokenString["return"]["funds"][(v[1])]).toFixed(8);
 	    }
@@ -494,8 +500,8 @@ var v = pair.split('_');
 var around = _g["rules"]["pairs"][pair]["decimal_places"];
 var strategy = _g["set"]["strategy"];
 
-var url = ""+_g["host"]+"/api_wex.php?method=getView&pair="+pair+"&strategy="+strategy;
-
+var url = _g["host"]+"/api_wex.php?method=getView&pair="+pair+"&strategy="+strategy;
+console.log(url);
     var req = getXMLHTTP();
     if (!req) {
         log("Unable to set up the XHR object.");
