@@ -78,7 +78,7 @@ if ($method == 'TradeHistory'){
 
 	if(isset($_POST['pair'])) { $pair = $_POST['pair']; } elseif(isset($_GET['pair'])) { $pair = $_GET['pair']; } else { $pair = 0; }
 	if(isset($_POST['since'])) { $since = $_POST['since']; } elseif(isset($_GET['since'])) { $since = $_GET['since']; } else { $since = 0; }
-	$result = btce_query($method, array("pair" => "$pair","since" => "$since", "order" => "DESC"));
+	$result = btce_query($method, array("pair" => "$pair", "since" => $since));
 	echo json_encode($result);
 
 }
@@ -144,6 +144,8 @@ if ($method == 'getView') {
 	$i=0;
 	$j=0;
 
+
+
 while ($fcontents[$i]) {
 	$i++;
 	$low[$j] = $fcontents[$i];
@@ -180,7 +182,8 @@ $rangeprice = max(max($open),max($close)) - min(min($open),min($close));
 	}
 
 	if ($strategy == 1) {
-		for ($i=24;$i<$imax;$i++){
+		$istart = (int)($imax*0.5);
+		for ($i=$istart;$i<$imax;$i++){
 			$body12[$j] = $open[$i];
 			$j++;
 			$body12[$j] = $close[$i];
@@ -191,7 +194,8 @@ $rangeprice = max(max($open),max($close)) - min(min($open),min($close));
 	}
 
 	if ($strategy == 2) {
-		for ($i=36;$i<$imax;$i++){
+		$istart = (int)($imax*0.75);
+		for ($i=$istart;$i<$imax;$i++){
 			$body6[$j] = $open[$i];
 			$j++;
 			$body6[$j] = $close[$i];
@@ -202,7 +206,8 @@ $rangeprice = max(max($open),max($close)) - min(min($open),min($close));
 	}
 
 	if ($strategy == 3) {
-		for ($i=45;$i<$imax;$i++){
+	$istart = $imax-3;
+		for ($i=$istart;$i<$imax;$i++){
 			$body2[$j] = $open[$i];
 			$j++;
 			$body2[$j] = $close[$i];
@@ -213,13 +218,14 @@ $rangeprice = max(max($open),max($close)) - min(min($open),min($close));
 	}
 
 	if ($strategy == 4) {
+		$istart = $imax-3;
 		for ($i=0;$i<$imax;$i++){
 			$body24[$j] = $open[$i];
 			$j++;
 			$body24[$j] = $close[$i];
 			$j++;
 		}
-		for ($i=45;$i<$imax;$i++){
+		for ($i=$istart;$i<$imax;$i++){
 			$body2[$j] = $open[$i];
 			$j++;
 			$body2[$j] = $close[$i];
