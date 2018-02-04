@@ -336,33 +336,6 @@ req.send();
 					document.getElementById('inner_'+key).innerHTML = (brokenString["return"]["funds"][key]).toFixed(8);
 				}
 			}
-			/*
-    		_g["balances"]["usd"] = (brokenString["return"]["funds"]["usd"]).toFixed(8);
-			_g["balances"]["eur"] = (brokenString["return"]["funds"]["eur"]).toFixed(8);
-			_g["balances"]["rur"] = (brokenString["return"]["funds"]["rur"]).toFixed(8);
-			_g["balances"]["btc"] = (brokenString["return"]["funds"]["btc"]).toFixed(8);
-			_g["balances"]["ltc"] = (brokenString["return"]["funds"]["ltc"]).toFixed(8);
-			_g["balances"]["nmc"] = (brokenString["return"]["funds"]["nmc"]).toFixed(8);
-			_g["balances"]["nvc"] = (brokenString["return"]["funds"]["nvc"]).toFixed(8);
-			_g["balances"]["ppc"] = (brokenString["return"]["funds"]["ppc"]).toFixed(8);
-			_g["balances"]["dsh"] = (brokenString["return"]["funds"]["dsh"]).toFixed(8);
-			_g["balances"]["eth"] = (brokenString["return"]["funds"]["eth"]).toFixed(8);
-			_g["balances"]["bch"] = (brokenString["return"]["funds"]["bch"]).toFixed(8);
-			_g["balances"]["zec"] = (brokenString["return"]["funds"]["zec"]).toFixed(8);
-
-			document.getElementById('inner_usd').innerHTML = (brokenString["return"]["funds"]["usd"]).toFixed(8);
-			document.getElementById('inner_eur').innerHTML = (brokenString["return"]["funds"]["eur"]).toFixed(8);
-			document.getElementById('inner_rur').innerHTML = (brokenString["return"]["funds"]["rur"]).toFixed(8);
-			document.getElementById('inner_btc').innerHTML = (brokenString["return"]["funds"]["btc"]).toFixed(8);
-			document.getElementById('inner_ltc').innerHTML = (brokenString["return"]["funds"]["ltc"]).toFixed(8);
-			document.getElementById('inner_nmc').innerHTML = (brokenString["return"]["funds"]["nmc"]).toFixed(8);
-			document.getElementById('inner_nvc').innerHTML = (brokenString["return"]["funds"]["nvc"]).toFixed(8);
-			document.getElementById('inner_ppc').innerHTML = (brokenString["return"]["funds"]["ppc"]).toFixed(8);
-			document.getElementById('inner_dsh').innerHTML = (brokenString["return"]["funds"]["dsh"]).toFixed(8);
-			document.getElementById('inner_eth').innerHTML = (brokenString["return"]["funds"]["eth"]).toFixed(8);
-			document.getElementById('inner_bch').innerHTML = (brokenString["return"]["funds"]["bch"]).toFixed(8);
-			document.getElementById('inner_zec').innerHTML = (brokenString["return"]["funds"]["zec"]).toFixed(8);
-			*/
 			document.getElementById('v_a').innerHTML = v[0].toUpperCase() + ": " + (brokenString["return"]["funds"][(v[0])]).toFixed(8);
 			document.getElementById('v_b').innerHTML = v[1].toUpperCase() + ": " + (brokenString["return"]["funds"][(v[1])]).toFixed(8);
 	    }
@@ -501,7 +474,7 @@ var around = _g["rules"]["pairs"][pair]["decimal_places"];
 var strategy = _g["set"]["strategy"];
 
 var url = _g["host"]+"/api_wex.php?method=getView&pair="+pair+"&strategy="+strategy;
-console.log(url);
+
     var req = getXMLHTTP();
     if (!req) {
         log("Unable to set up the XHR object.");
@@ -722,7 +695,7 @@ if (type == "SELL") {
 	  for (var i = 0; i < splitOrders.length; i++) {
 	  	tempPriceUp = parseFloat(splitOrders[i]) + stepDistanceFix / 2;
 		tempPriceDown = splitOrders[i] - stepDistanceFix / 2;
-														console.log("sellPriceFix="+sellPriceFix);		console.log("stepDistanceFix="+stepDistanceFix);
+
 		if ( (sellPriceFix >= tempPriceDown && sellPriceFix <= tempPriceUp) || sellPriceFix <= lastPrice || (sellPriceFix >= tempLastPriceDown && sellPriceFix <= tempLastPriceUp) ){
 		  overlp++;
 		}
