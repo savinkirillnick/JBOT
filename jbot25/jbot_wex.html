@@ -156,6 +156,9 @@ _g["arraySellOrders"] = [];
 //Time of last order sent
 _g["lastOrderTime"] = 0;
 
+//Time of last order sent
+_g["lastOrderType"] = "none";
+
 //Price of last order execute
 _g["lastOrderPrice"] = 0;
 
@@ -355,6 +358,7 @@ var pair = _g["pairs"][top.document.runBot.pair.value];
 var key = _g["set"]["key"];
 var secret = _g["set"]["secret"];
 var since = parseInt(new Date().getTime()/1000)-86400;
+var orderAble = parseInt(new Date().getTime()/1000)-_g["set"]["orderLife"]*60;
 var v = (pair).split('_');
 var around = _g["rules"]["pairs"][pair]["decimal_places"];
 
@@ -373,13 +377,18 @@ req.send();
 	  if (req.responseText) {
 		var brokenString = JSON.parse(req.responseText);
 		var lastPrice = 0;
+		var lastType = "none";
 		document.getElementById('history').innerHTML = "";
 		if (brokenString.success) {
 			for (var key in brokenString["return"]) {
 				document.getElementById('history').innerHTML = "<div style=\"white-space: nowrap;\">"+brokenString["return"][key]["type"].toUpperCase()+" "+parseFloat(brokenString["return"][key]["amount"]).toFixed(around)+" "+v[0].toUpperCase()+" @ "+parseFloat(brokenString["return"][key]["rate"]).toFixed(around)+" "+v[1].toUpperCase()+"</div>" + document.getElementById('history').innerHTML;
-				lastPrice = brokenString["return"][key]["rate"];
+				if (parseInt(brokenString["return"][key]["timestamp"]) > orderAble) {
+					lastPrice = brokenString["return"][key]["rate"];
+					lastType = brokenString["return"][key]["type"];
+				}
 			}
 		_g["lastOrderPrice"] = lastPrice;
+		_g["lastOrderType"] = lastType;
 		}
 	  }
 	}
@@ -531,12 +540,13 @@ var minPrice = _g["rules"]["pairs"][pair]["min_price"];
 var maxPrice = _g["rules"]["pairs"][pair]["max_price"];
 var orderAmount = parseFloat(top.document.runBot.buyAmount.value);
 var orderPrice = parseFloat(top.document.runBot.buyPrice.value);
+var lastOrderType = (_g["lastOrderType"]).toUpperCase();
 var activeDepo = _g["activeDepo"];
 var maxDepo = _g["set"]["maxDepo"];
 var pointDepo = maxDepo - orderAmount;
 var depoControl = 1;
 
-	if (maxDepo > 0 && (activeDepo > pointDepo)) {
+	if (maxDepo > 0 && (activeDepo > pointDepo || lastOrderType == "BUY")) {
 		depoControl = 0;
 	} else {
 		depoControl = 1;
@@ -565,12 +575,13 @@ var minPrice = _g["rules"]["pairs"][pair]["min_price"];
 var maxPrice = _g["rules"]["pairs"][pair]["max_price"];
 var orderAmount = parseFloat(top.document.runBot.sellAmount.value);
 var orderPrice = parseFloat(top.document.runBot.sellPrice.value);
+var lastOrderType = (_g["lastOrderType"]).toUpperCase();
 var activeDepo = _g["activeDepo"];
 var maxDepo = _g["set"]["maxDepo"];
 var pointDepo = maxDepo - orderAmount;
 var depoControl = 1;
 
-	if (maxDepo > 0 && (activeDepo > pointDepo)) {
+	if (maxDepo > 0 && (activeDepo > pointDepo || lastOrderType == "SELL")) {
 		depoControl = 0;
 	} else {
 		depoControl = 1;
