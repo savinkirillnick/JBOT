@@ -10,7 +10,7 @@
   gtag('config', 'UA-47078483-4');
 </script>
 <title>
-WEX jBOT v2.5 u.6
+WEX jBOT v2.5 u.7
 </title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="Bitcoin wex.nz j-Bot" />
@@ -358,7 +358,7 @@ var pair = _g["pairs"][top.document.runBot.pair.value];
 var key = _g["set"]["key"];
 var secret = _g["set"]["secret"];
 var since = parseInt(new Date().getTime()/1000)-86400;
-var orderAble = parseInt(new Date().getTime()/1000)-_g["set"]["orderLife"]*60;
+var orderAble = parseInt(new Date().getTime()/1000)-_g["set"]["stepTime"];
 var v = (pair).split('_');
 var around = _g["rules"]["pairs"][pair]["decimal_places"];
 
@@ -581,7 +581,7 @@ var maxDepo = _g["set"]["maxDepo"];
 var pointDepo = maxDepo - orderAmount;
 var depoControl = 1;
 
-	if (maxDepo > 0 && (activeDepo > pointDepo || lastOrderType == "SELL")) {
+	if (maxDepo > 0 && (activeDepo > pointDepo)) {
 		depoControl = 0;
 	} else {
 		depoControl = 1;
@@ -662,8 +662,7 @@ if (stepDensity != 0) {
 	var stepDistanceFix = _g["set"]["stepDistance"];
 }
 
-
-var tempLastPriceUp = _g["lastOrderPrice"] + stepDistanceFix / 2;
+var tempLastPriceUp = parseFloat(_g["lastOrderPrice"]) + stepDistanceFix / 2;
 var tempLastPriceDown = _g["lastOrderPrice"] - stepDistanceFix / 2;
 var buyAmount = parseFloat(_g["set"]["stepMount"]).toFixed(around);
 var sellAmount = parseFloat(_g["set"]["stepMount"]*(100-_g["set"]["fee"])/100).toFixed(around);
@@ -1098,43 +1097,43 @@ function initBot() {
 <table cellpadding='0' cellspacing='0' border='0' width='100%'>
 <tr>
 
-<td width='70'>USD:&nbsp;</td>
+<td width='70' align='right'>USD:&nbsp;</td>
 <td width='100'><div id='inner_usd'>Loading...</div></td>
 
-<td width='70'>EUR:&nbsp;</td>
+<td width='70' align='right'>EUR:&nbsp;</td>
 <td width='100'><div id='inner_eur'>Loading...</div></td>
 
-<td width='70'>RUR:&nbsp;</td>
+<td width='70' align='right'>RUR:&nbsp;</td>
 <td width='100'><div id='inner_rur'>Loading...</div></td>
 
-<td width='70'>BTC:&nbsp;</td>
+<td width='70' align='right'>BTC:&nbsp;</td>
 <td width='100'><div id='inner_btc'>Loading...</div></td>
 
-<td width='70'>LTC:&nbsp;</td>
+<td width='70' align='right'>LTC:&nbsp;</td>
 <td width='100'><div id='inner_ltc'>Loading...</div></td>
 
-<td width='70'>NMC:&nbsp;</td>
+<td width='70' align='right'>NMC:&nbsp;</td>
 <td width=*><div id='inner_nmc'>Loading...</div></td>
 
 </tr>
 <tr>
 
-<td>NVC:&nbsp;</td>
+<td align='right'>NVC:&nbsp;</td>
 <td><div id='inner_nvc'>Loading...</div></td>
 
-<td>PPC:&nbsp;</td>
+<td align='right'>PPC:&nbsp;</td>
 <td><div id='inner_ppc'>Loading...</div></td>
 
-<td>DSH:&nbsp;</td>
+<td align='right'>DSH:&nbsp;</td>
 <td><div id='inner_dsh'>Loading...</div></td>
 
-<td>ETH:&nbsp;</td>
+<td align='right'>ETH:&nbsp;</td>
 <td><div id='inner_eth'>Loading...</div></td>
 
-<td>BCH:&nbsp;</td>
+<td align='right'>BCH:&nbsp;</td>
 <td><div id='inner_bch'>Loading...</div></td>
 
-<td>ZEC:&nbsp;</td>
+<td align='right'>ZEC:&nbsp;</td>
 <td><div id='inner_zec'>Loading...</div></td>
 
 </tr>
