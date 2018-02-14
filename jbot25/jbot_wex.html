@@ -653,19 +653,20 @@ var buyPriceFix = parseFloat(top.document.runBot.buyPrice.value).toFixed(around)
 var sellPriceFix = parseFloat(top.document.runBot.sellPrice.value).toFixed(around);
 var tempPriceUp = 0;
 var tempPriceDown = 0;
-var stepDensity = _g["set"]["stepDensity"];
-var stepDistance = _g["set"]["stepDistance"];
-var lastPrice = _g["lastPrice"];
+var stepDensity = parseFloat(_g["set"]["stepDensity"]);
+var stepDistance = parseFloat(_g["set"]["stepDistance"]);
+var lastPrice = parseFloat(_g["lastPrice"]);
+var lastOrderPrice = parseFloat(_g["lastOrderPrice"]);
 if (stepDensity != 0) {
 	var stepDistanceFix = _g["rangePrice"] / stepDensity;
 } else {
-	var stepDistanceFix = _g["set"]["stepDistance"];
+	var stepDistanceFix = stepDistance;
 }
 
 var tempLastPriceUp = parseFloat(_g["lastOrderPrice"]) + stepDistanceFix / 2;
-var tempLastPriceDown = _g["lastOrderPrice"] - stepDistanceFix / 2;
+var tempLastPriceDown = stepDistance_g["lastOrderPrice"]) - stepDistanceFix / 2;
 var buyAmount = parseFloat(_g["set"]["stepMount"]).toFixed(around);
-var sellAmount = parseFloat(_g["set"]["stepMount"]*(100-_g["set"]["fee"])/100).toFixed(around);
+var sellAmount = parseFloat(_g["set"]["stepMount"]*(100 - _g["set"]["fee"])/100).toFixed(around);
 
 if (type == "BUY") {
   if (stepDistance != 0) {
