@@ -664,7 +664,7 @@ if (stepDensity != 0) {
 }
 
 var tempLastPriceUp = parseFloat(_g["lastOrderPrice"]) + stepDistanceFix / 2;
-var tempLastPriceDown = stepDistance_g["lastOrderPrice"]) - stepDistanceFix / 2;
+var tempLastPriceDown = parseFloat(_g["lastOrderPrice"]) - stepDistanceFix / 2;
 var buyAmount = parseFloat(_g["set"]["stepMount"]).toFixed(around);
 var sellAmount = parseFloat(_g["set"]["stepMount"]*(100 - _g["set"]["fee"])/100).toFixed(around);
 
@@ -683,7 +683,7 @@ if (type == "BUY") {
 		}
 	  }
 	  if (overlp > 0) {
-	    buyPriceFix = parseFloat(buyPriceFix - stepDistanceFix).toFixed(around);
+	    buyPriceFix = (parseFloat(buyPriceFix) - parseFloat(stepDistanceFix)).toFixed(around);
 	  }
 	  vacans--;
 	}
