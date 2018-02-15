@@ -10,7 +10,7 @@
   gtag('config', 'UA-47078483-4');
 </script>
 <title>
-WEX jBOT v2.5 u.7
+WEX jBOT v2.5 u.8
 </title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="Bitcoin wex.nz j-Bot" />
@@ -530,19 +530,19 @@ document.getElementById('progress_bar').innerHTML += "&#9618;";
 
 function controlBuyPrice() {
 
-var com = top.document.runBot.buyAmount.value*top.document.runBot.buyPrice.value;
+var com = parseFloat(top.document.runBot.buyAmount.value*top.document.runBot.buyPrice.value);
 var pair = _g["pairs"][top.document.runBot.pair.value];
 var v = pair.split('_');
-var around = _g["rules"]["pairs"][pair]["decimal_places"];
-var amount = _g["balances"][(v[1])];
-var minAmount = _g["rules"]["pairs"][pair]["min_amount"];
-var minPrice = _g["rules"]["pairs"][pair]["min_price"];
-var maxPrice = _g["rules"]["pairs"][pair]["max_price"];
+var around = parseInt(_g["rules"]["pairs"][pair]["decimal_places"]);
+var amount = parseFloat(_g["balances"][(v[1])]);
+var minAmount = parseFloat(_g["rules"]["pairs"][pair]["min_amount"]);
+var minPrice = parseFloat(_g["rules"]["pairs"][pair]["min_price"]);
+var maxPrice = parseFloat(_g["rules"]["pairs"][pair]["max_price"]);
 var orderAmount = parseFloat(top.document.runBot.buyAmount.value);
 var orderPrice = parseFloat(top.document.runBot.buyPrice.value);
 var lastOrderType = (_g["lastOrderType"]).toUpperCase();
-var activeDepo = _g["activeDepo"];
-var maxDepo = _g["set"]["maxDepo"];
+var activeDepo = parseFloat(_g["activeDepo"]);
+var maxDepo = parseFloat(_g["set"]["maxDepo"]);
 var pointDepo = maxDepo - orderAmount;
 var depoControl = 1;
 
@@ -565,19 +565,19 @@ var depoControl = 1;
 
 function controlSellPrice() {
 
-var com = top.document.runBot.sellAmount.value;
+var com = parseFloat(top.document.runBot.sellAmount.value);
 var pair = _g["pairs"][top.document.runBot.pair.value];
 var v = pair.split('_');
-var around = _g["rules"]["pairs"][pair]["decimal_places"];
-var amount = _g["balances"][(v[0])];
-var minAmount = _g["rules"]["pairs"][pair]["min_amount"];
-var minPrice = _g["rules"]["pairs"][pair]["min_price"];
-var maxPrice = _g["rules"]["pairs"][pair]["max_price"];
+var around = parseInt(_g["rules"]["pairs"][pair]["decimal_places"]);
+var amount = parseFloat(_g["balances"][(v[0])]);
+var minAmount = parseFloat(_g["rules"]["pairs"][pair]["min_amount"]);
+var minPrice = parseFloat(_g["rules"]["pairs"][pair]["min_price"]);
+var maxPrice = parseFloat(_g["rules"]["pairs"][pair]["max_price"]);
 var orderAmount = parseFloat(top.document.runBot.sellAmount.value);
 var orderPrice = parseFloat(top.document.runBot.sellPrice.value);
 var lastOrderType = (_g["lastOrderType"]).toUpperCase();
-var activeDepo = _g["activeDepo"];
-var maxDepo = _g["set"]["maxDepo"];
+var activeDepo = parseFloat(_g["activeDepo"]);
+var maxDepo = parseFloat(_g["set"]["maxDepo"]);
 var pointDepo = maxDepo - orderAmount;
 var depoControl = 1;
 
@@ -647,7 +647,7 @@ var url;
 var overlp = 0;
 var vacans = 0;
 var pair = _g["pairs"][top.document.runBot.pair.value];
-var around = _g["rules"]["pairs"][pair]["decimal_places"];
+var around = parseInt(_g["rules"]["pairs"][pair]["decimal_places"]);
 var v = pair.split('_');
 var buyPriceFix = parseFloat(top.document.runBot.buyPrice.value).toFixed(around);
 var sellPriceFix = parseFloat(top.document.runBot.sellPrice.value).toFixed(around);
@@ -843,7 +843,7 @@ if (key && secret) {
 				timeControl = 0;
 			}
 			var pair = _g["pairs"][top.document.runBot.pair.value];
-			var around = _g["rules"]["pairs"][pair]["decimal_places"];
+			var around = parseInt(_g["rules"]["pairs"][pair]["decimal_places"]);
 
 			if (_g["botIsRun"] == 1 && timeControl == 1) {
 
